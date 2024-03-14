@@ -4,13 +4,12 @@ class DetailDoctor extends StatelessWidget {
   final String nom;
   final String specialiste;
   final String image;
-  final void Function()? onPressed;
+
   const DetailDoctor({
     Key? key,
     required this.nom,
     required this.specialiste,
     required this.image,
-    this.onPressed,
   }) : super(key: key);
 
   @override

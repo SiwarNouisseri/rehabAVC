@@ -1,10 +1,19 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/components/doctorDetail.dart';
 import 'package:first/components/drawer.dart';
+import 'package:first/patient/ExercicesCog.dart';
+import 'package:first/patient/ExercicesParole.dart';
+import 'package:first/patient/ExercicesPhy.dart';
 import 'package:first/patient/docteurSophie.dart';
+import 'package:first/patient/docteurWalid.dart';
+import 'package:first/patient/docteurhejer.dart';
+import 'package:first/patient/docteurmehdi.dart';
+import 'package:first/patient/progression.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -145,32 +154,40 @@ class _HomepageState extends State<Homepage> {
           SizedBox(
             height: 30,
           ),
-          Container(
-            width: 20,
-            height: 100,
-            margin: EdgeInsets.only(right: 15, left: 15),
-            child: Card(
-              shadowColor: Colors.blue,
-              child: Row(
-                children: [
-                  SizedBox(width: 25),
-                  Text(
-                    "Consulter ma progression",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: Colors.blue,
-                      fontSize: 17,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Progression()),
+              );
+            },
+            child: Container(
+              width: 20,
+              height: 100,
+              margin: EdgeInsets.only(right: 15, left: 15),
+              child: Card(
+                shadowColor: Colors.blue,
+                child: Row(
+                  children: [
+                    SizedBox(width: 25),
+                    Text(
+                      "Consulter ma progression",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.blue,
+                        fontSize: 17,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 21),
-                  Image.asset(
-                    "images/progression.png",
-                    width: 60,
-                    height: 70,
-                  ),
-                  SizedBox(width: 20),
-                  Icon(Icons.arrow_forward_ios_rounded, color: Colors.blue),
-                ],
+                    SizedBox(width: 21),
+                    Image.asset(
+                      "images/progression.png",
+                      width: 60,
+                      height: 70,
+                    ),
+                    SizedBox(width: 20),
+                    Icon(Icons.arrow_forward_ios_rounded, color: Colors.blue),
+                  ],
+                ),
               ),
             ),
           ),
@@ -188,77 +205,102 @@ class _HomepageState extends State<Homepage> {
             padding: const EdgeInsets.only(left: 20.0),
             child: Row(
               children: [
-                Container(
-                  width: 110,
-                  child: Card(
-                    color: Color.fromARGB(188, 170, 250, 192),
-                    shadowColor: Colors.blue,
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          "images/exercice.png",
-                          width: 60,
-                          height: 70,
-                        ),
-                        Text(
-                          " Physique ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w300,
-                            color: Colors.blueGrey[700],
-                            fontSize: 17,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ExercicePhy()),
+                    );
+                  },
+                  child: Container(
+                    width: 110,
+                    child: Card(
+                      color: Color.fromARGB(188, 170, 250, 192),
+                      shadowColor: Colors.blue,
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            "images/exercice.png",
+                            width: 60,
+                            height: 70,
                           ),
-                        ),
-                      ],
+                          Text(
+                            " Physique ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              color: Colors.blueGrey[700],
+                              fontSize: 17,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 SizedBox(width: 15),
-                Container(
-                  width: 110,
-                  child: Card(
-                    color: Colors.amber[100],
-                    shadowColor: Colors.blue[600],
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          "images/intelligence.png",
-                          width: 60,
-                          height: 70,
-                        ),
-                        Text(
-                          "Cognitive",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w300,
-                            color: Colors.blueGrey[700],
-                            fontSize: 17,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ExercicesCog()),
+                    );
+                  },
+                  child: Container(
+                    width: 110,
+                    child: Card(
+                      color: Colors.amber[100],
+                      shadowColor: Colors.blue[600],
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            "images/intelligence.png",
+                            width: 60,
+                            height: 70,
                           ),
-                        ),
-                      ],
+                          Text(
+                            "Cognitive",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              color: Colors.blueGrey[700],
+                              fontSize: 17,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 SizedBox(width: 15),
-                Container(
-                  width: 110,
-                  child: Card(
-                    color: Colors.red[200],
-                    shadowColor: Colors.blue,
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          "images/personne.png",
-                          width: 60,
-                          height: 70,
-                        ),
-                        Text(
-                          "Parole",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w300,
-                            color: Colors.blueGrey[700],
-                            fontSize: 17,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ExercicesParole()),
+                    );
+                  },
+                  child: Container(
+                    width: 110,
+                    child: Card(
+                      color: Colors.red[200],
+                      shadowColor: Colors.blue,
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            "images/personne.png",
+                            width: 60,
+                            height: 70,
                           ),
-                        ),
-                      ],
+                          Text(
+                            "Parole",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              color: Colors.blueGrey[700],
+                              fontSize: 17,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -303,37 +345,53 @@ class _HomepageState extends State<Homepage> {
                       );
                     },
                     child: DetailDoctor(
-                        nom: "Dr. Sophia Martin",
+                        nom: "Dr.Oumaima Karray",
                         specialiste: "Orthophoniste",
                         image: "images/docteur.jpg"),
                   ),
                 ),
                 SizedBox(width: 10),
-                DetailDoctor(
-                    nom: "Dr. James Anderson",
-                    specialiste: "Ergothérapeute",
-                    image: "images/docteur1.jpg"),
-                SizedBox(width: 10),
-                DetailDoctor(
-                    nom: "Dr. Michael Williams",
-                    specialiste: "Orthophoniste",
-                    image: "images/docteur2.jpg"),
-                SizedBox(width: 10),
-                DetailDoctor(
-                    nom: "Dr. Emily Taylor",
-                    specialiste: "Ergothérapeute",
-                    image: "images/docteur4.jpg"),
-                SizedBox(width: 10),
-                DetailDoctor(
-                  nom: "Dr. Christopher Baker",
-                  specialiste: "Orthophoniste",
-                  image: "images/docteur6.jpg",
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DoctorMehdi()),
+                    );
+                  },
+                  child: DetailDoctor(
+                      nom: "Dr.  Mehdi Ben Salah",
+                      specialiste: "Ergothérapeute",
+                      image: "images/docteur1.jpg"),
                 ),
                 SizedBox(width: 10),
-                DetailDoctor(
-                    nom: "Dr. Sarah Johnson",
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DocteurWalid()),
+                    );
+                  },
+                  child: DetailDoctor(
+                    nom: "Dr. Walid Houaijia",
+                    specialiste: "Orthophoniste",
+                    image: "images/docteur2.jpg",
+                  ),
+                ),
+                SizedBox(width: 10),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DoctorHejer()),
+                    );
+                  },
+                  child: DetailDoctor(
+                    nom: "Dr.  Hajer Triki",
                     specialiste: "Ergothérapeute",
-                    image: "images/docteur5.jpg"),
+                    image: "images/docteur4.jpg",
+                  ),
+                ),
+                SizedBox(width: 10),
               ],
             ),
           ),

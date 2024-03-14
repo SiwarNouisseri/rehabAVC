@@ -1,13 +1,16 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:iconsax/iconsax.dart';
 
-class Docteur1 extends StatelessWidget {
-  const Docteur1({super.key});
+class DoctorMehdi extends StatefulWidget {
+  const DoctorMehdi({super.key});
 
+  @override
+  State<DoctorMehdi> createState() => _DoctorMehdiState();
+}
+
+class _DoctorMehdiState extends State<DoctorMehdi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +48,7 @@ class Docteur1 extends StatelessWidget {
               child: Row(
                 children: [
                   Image.asset(
-                    "images/docteur-removebg.png",
+                    "images/docteur1-removebg.png",
                     width: 200,
                   ),
                   Padding(
@@ -55,14 +58,14 @@ class Docteur1 extends StatelessWidget {
                         height: 50,
                       ),
                       Text(
-                        "Dr. Oumaima Karray",
+                        "Dr. Mehdi Ben Salah",
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 17,
                             color: Colors.white),
                       ),
                       Text(
-                        "Orthophoniste",
+                        "Ergothérapeute",
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 14,
@@ -79,7 +82,7 @@ class Docteur1 extends StatelessWidget {
                             ),
                             SizedBox(width: 10),
                             Text(
-                              "10 AM - 14 PM",
+                              "8 AM - 11 AM",
                               style: TextStyle(
                                   fontWeight: FontWeight.w400,
                                   fontSize: 14,
@@ -89,7 +92,7 @@ class Docteur1 extends StatelessWidget {
                         ),
                       ),
                       const Padding(
-                        padding: EdgeInsets.only(right: 25.0),
+                        padding: EdgeInsets.only(right: 26.0),
                         child: Row(
                           children: [
                             Icon(
@@ -98,7 +101,7 @@ class Docteur1 extends StatelessWidget {
                             ),
                             SizedBox(width: 10),
                             Text(
-                              "+100 Patients",
+                              "+200 Patients",
                               style: TextStyle(
                                   fontWeight: FontWeight.w400,
                                   fontSize: 14,
@@ -115,7 +118,7 @@ class Docteur1 extends StatelessWidget {
                           ),
                           SizedBox(width: 10),
                           Text(
-                            "+9 ans Expérience",
+                            "+15 ans Expérience",
                             style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 14,
@@ -185,7 +188,7 @@ class Docteur1 extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 15.0, right: 15.0),
             child: Text(
-              "Dr. Oumaima Karray, spécialiste en diagnostic et du traitement des troubles de la parole et du langage, propose des soins personnalisés grâce à son approche empathique et à ses techniques avancées pour améliorer les compétences de communication",
+              "Mehdi Ben salah, un ergothérapeute chevronnée, a dédié son carrière à optimiser le quotidien de ses patients. Avec plus de 15 ans de pratique il a acquis une expertise solide incarnant son engagement continu envers la rectification des soins ergothérapiques.",
               style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
@@ -236,11 +239,11 @@ class Docteur1 extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 20.0,
-                        backgroundImage: AssetImage("images/patient.jpg"),
+                        backgroundImage: AssetImage("images/patient3.jpg"),
                       ),
                       SizedBox(width: 5),
                       Text(
-                        "Mohamed Abassi",
+                        "Nizar Tabbebi",
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 14,
@@ -265,7 +268,7 @@ class Docteur1 extends StatelessWidget {
                     ],
                   ),
                   Text(
-                      "Consultation pratique et efficace avec Dr. Oumaima, très professionnelle.")
+                      "Télémédecine avec le Dr. Mehdi : claire, rapide, efficace.")
                 ]),
               ),
             ),
@@ -291,10 +294,10 @@ class Docteur1 extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 20.0,
-                        backgroundImage: AssetImage("images/patient1.jpg"),
+                        backgroundImage: AssetImage("images/patient4.jpg"),
                       ),
                       Text(
-                        " Ons Selmi",
+                        " Hanin Ammani",
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 14,
@@ -319,62 +322,7 @@ class Docteur1 extends StatelessWidget {
                     ],
                   ),
                   Text(
-                      "Superbe, elle est toujours à l'écoute, offre des solutions adaptées et facilite l'accès aux soins.")
-                ]),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 110,
-              decoration: BoxDecoration(
-                color: Colors.white,
-
-                borderRadius: BorderRadius.circular(
-                    15), // Move the color property to decoration
-                border: Border.all(
-                  color: Colors.blue, // Set the color of the border
-                  width: 0.2, // Set the width of the border
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 20.0,
-                        backgroundImage: AssetImage("images/patient2.jpg"),
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        "Hatem Bouzidi",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                            color: Colors.black),
-                      ),
-                      SizedBox(width: 10),
-                      RatingBar.builder(
-                          itemSize: 20,
-                          initialRating: 4,
-                          minRating: 1,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          itemPadding: EdgeInsets.symmetric(horizontal: 4),
-                          itemBuilder: (context, _) => Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                              ),
-                          onRatingUpdate: (rating) {
-                            print(rating);
-                          })
-                    ],
-                  ),
-                  Text(
-                      "Dr.Oumaima est incroyablement attentive, répond rapidement et donne des conseils utiles.")
+                      "Trop professionnel ayant un approche précise a fait de cette expérience une alternative convaincante.")
                 ]),
               ),
             ),

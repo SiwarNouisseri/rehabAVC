@@ -1,7 +1,14 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:first/components/drawer.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 
 class Profil extends StatefulWidget {
   const Profil({super.key});
@@ -11,6 +18,24 @@ class Profil extends StatefulWidget {
 }
 
 class _ProfilState extends State<Profil> {
+  File? image;
+  static String? url;
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+      var imagename = basename(image!.path);
+
+      var refStorge = FirebaseStorage.instance.ref(imagename);
+      await refStorge.putFile(imageTemporary!);
+      url = await refStorge.getDownloadURL();
+      setState(() => this.image = imageTemporary);
+    } on PlatformException catch (e) {
+      print("=============== Failed to pick picture :$e");
+    }
+  }
+
 //the current user
   final currentUser = FirebaseAuth.instance.currentUser;
 //user information
@@ -54,7 +79,7 @@ class _ProfilState extends State<Profil> {
       appBar: AppBar(
         title: Text(" Mon Compte",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.blue[400],
+        backgroundColor: Colors.blue[300],
         iconTheme: IconThemeData(
           color: Colors.white,
         ),
@@ -68,128 +93,234 @@ class _ProfilState extends State<Profil> {
           children: [
             // Conteneur d'arrière-plan avec des coins arrondis
             Container(
-              height: 300,
+              height: 150,
               decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.blue[300] ?? Colors.blue,
+                    Colors.blue[50] ?? Colors.blue,
+                  ], // Couleurs du dégradé
+                  begin: Alignment.topLeft, // Position de départ du dégradé
+                  end: Alignment.bottomLeft, // Position d'arrêt du dégradé
+                ),
                 color: Colors.blue[400],
                 borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(70),
-                  bottomRight: Radius.circular(50),
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
                 ),
               ),
             ),
             // Card avec positionnement et ajustements souhaités
             Positioned(
-              top: AppBar().preferredSize.height +
-                  30.0, // Espace entre le haut du Card et l'appbar
-              left: 20.0,
-              right: 20.0,
-              child: Container(
-                height: 650, // Ajustez la hauteur du Card selon vos besoins
-                child: Card(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    elevation: 0.5,
-                    shadowColor: Colors.blue[100],
-                    // Contenu du Card
-                    child: ListView(
-                      children: [
-                        //profile picture
+                top: AppBar().preferredSize.height + 30.0,
+                left: 20.0,
+                right: 20.0,
+                child: Container(
+                  height: 650,
+                  child: ListView(
+                    children: [
+                      //profile picture
 
-                        Icon(
-                          Icons.person,
-                          size: 80,
-                          color: Colors.blue[400],
-                        ),
-                        SizedBox(height: 100),
-                        Padding(
-                          padding: EdgeInsets.only(left: 25.0),
-                          child: Text(
-                            "Mes informations :",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              color: Colors.lightBlue,
-                              fontSize: 30,
+                      Center(
+                        child: Stack(
+                          children: [
+                            Center(
+                              child: Stack(
+                                children: [
+                                  ClipOval(
+                                    child: Container(
+                                      width: 140,
+                                      height: 140,
+                                      child: url != null
+                                          ? Image.network(
+                                              url!,
+                                              width: 128,
+                                              height: 128,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.asset(
+                                              'images/avatar.jpeg',
+                                              width: 128,
+                                              height: 128,
+                                              fit: BoxFit.cover,
+                                            ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.add_a_photo_sharp,
+                                        color: Colors.pink[400],
+                                      ),
+                                      onPressed: () {
+                                        pickImage();
+                                      },
+                                    ),
+                                    bottom: -8,
+                                    left: 90,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
+                      ),
 
-                        SizedBox(height: 20),
-                        //user email
-                        Text(
-                          " E-mail:",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            color: Colors.grey,
-                            fontSize: 20,
-                          ),
-                        ),
-                        Text(
-                          currentUser!.email!,
+                      /*  SizedBox(height: 50),
+                      Padding(
+                        padding: EdgeInsets.only(left: 25.0),
+                        child: Text(
+                          "Mes informations :",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            color: Colors.grey,
-                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.lightBlue,
+                            fontSize: 25,
                           ),
                         ),
-                        //username
-                        Card(
-                          elevation: 5.0,
-                          margin: EdgeInsets.all(
-                              16.0), // Ajoutez une marge autour de la carte
-                          child: Padding(
-                            padding: EdgeInsets.all(
-                                16.0), // Ajoutez un rembourrage à l'intérieur de la carte
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Nom: ",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    color: Colors.grey,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                Text(
-                                  " $userName",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    color: Colors.grey,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
+                      ),*/
+
+                      SizedBox(height: 50),
+
+                      //user email
+                      Container(
+                        width: 300,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: Colors.pink,
+                            width: 0.2,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(width: 20),
+                            Icon(Icons.mail_outline, color: Colors.blue),
+                            SizedBox(width: 40),
+                            Text(
+                              currentUser!.email!,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black,
+                                fontSize: 17,
+                              ),
+                            ),
+                            SizedBox(width: 20),
+                            Icon(
+                              CupertinoIcons.pencil,
+                              color: Colors.blue,
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Container(
+                        width: 300,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: Colors.pink,
+                            width: 0.2,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(width: 20),
+                            Icon(Icons.person, color: Colors.blue),
+                            SizedBox(width: 40),
+                            Text(
+                              "$userName",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black,
+                                fontSize: 20,
+                              ),
+                            ),
+                            SizedBox(width: 200),
+                            Icon(
+                              CupertinoIcons.pencil,
+                              color: Colors.blue,
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Container(
+                        width: 300,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: Colors.pink,
+                            width: 0.2,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(width: 20),
+                            Icon(Icons.phone, color: Colors.blue),
+                            SizedBox(width: 40),
+                            Text(
+                              "$tel",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black,
+                                fontSize: 20,
+                              ),
+                            ),
+                            SizedBox(width: 240),
+                            Icon(
+                              CupertinoIcons.pencil,
+                              color: Colors.blue,
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                            width: 250,
+                            child: MaterialButton(
+                              minWidth: 60,
+                              height: 40,
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      color: Colors.pink[400] ?? Colors.pink,
+                                      width: 1.0),
+                                  borderRadius: BorderRadius.circular((10))),
+                              onPressed: () {},
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("Confirmer informations",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.blue,
+                                        )),
+                                  ]),
                             ),
                           ),
-                        ),
-
-                        //phone number
-                        Text(
-                          "Téléphone: ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            color: Colors.grey,
-                            fontSize: 20,
-                          ),
-                        ),
-                        Text(
-                          "  $tel",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            color: Colors.grey,
-                            fontSize: 20,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    )),
-              ),
-            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )),
           ],
         ),
       ),

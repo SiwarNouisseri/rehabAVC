@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:first/components/drawer.dart';
+import 'package:first/patient/drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,13 +27,31 @@ class _ProfilState extends State<Profil> {
       final imageTemporary = File(image.path);
       var imagename = basename(image!.path);
 
-      var refStorge = FirebaseStorage.instance.ref(imagename);
+      var refStorge = FirebaseStorage.instance.ref("images/$imagename");
       await refStorge.putFile(imageTemporary!);
       url = await refStorge.getDownloadURL();
       setState(() => this.image = imageTemporary);
+      updateImageUrl(url!);
     } on PlatformException catch (e) {
       print("=============== Failed to pick picture :$e");
     }
+  }
+  //add image url to firestore
+
+  void updateImageUrl(String newImageUrl) {
+    User? user = FirebaseAuth.instance.currentUser;
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+    // Find the document with the user's ID and update the imageURL field with the new URL
+    users.where('id', isEqualTo: user?.uid).get().then((querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        doc.reference.update({'image url': newImageUrl}).then((value) {
+          print("Image URL updated successfully!");
+        }).catchError((error) {
+          print("Error updating image URL: $error");
+        });
+      });
+    });
   }
 
 //the current user

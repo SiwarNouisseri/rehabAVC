@@ -1,9 +1,12 @@
-// ignore_for_file: prefer_const_constructors
-
+import 'package:first/auth/Role.dart';
+import 'package:first/auth/actorsauth.dart';
 import 'package:first/auth/login.dart';
-import 'package:first/auth/profile.dart';
+import 'package:first/patient/profile.dart';
 import 'package:first/auth/signup.dart';
+import 'package:first/ergotherapeute/homeErgo.dart';
 import 'package:first/homepage.dart';
+import 'package:first/orthophoniste/homertho.dart';
+import 'package:first/orthophoniste/signupOrth.dart';
 import 'package:first/patient/docteurSophie.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -41,7 +44,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: (FirebaseAuth.instance.currentUser != null &&
               FirebaseAuth.instance.currentUser!.emailVerified)
-          ? Homepage()
+          ? RoleChecker()
           : Login(),
       routes: {
         "signup": (contexte) => Signup(),
@@ -49,6 +52,10 @@ class _MyAppState extends State<MyApp> {
         "homepage": (context) => Homepage(),
         "profil": (context) => Profil(),
         "docteur1": (context) => Docteur1(),
+        "actor": (context) => Actor(),
+        "signupOrth": (context) => SignupOrtho(),
+        "homeOrtho": (context) => HomeOrtho(),
+        "homeErgo": (context) => HomeErgo(),
       },
     );
   }

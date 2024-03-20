@@ -1,5 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:first/auth/Role.dart';
+import 'package:first/ergotherapeute/homeErgo.dart';
+import 'package:first/homepage.dart';
+import 'package:first/orthophoniste/homertho.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -160,7 +165,14 @@ class _LoginState extends State<Login> {
                         email: email.text.trim(), password: password.text);
 
                 if (credential.user!.emailVerified) {
-                  Navigator.of(context).pushReplacementNamed("homepage");
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          RoleChecker(), // Display RoleChecker widget after email verification
+                    ),
+                  );
+                  // Navigator.of(context).pushReplacementNamed("homepage");
                 } else {
                   AwesomeDialog(
                     context: context,
@@ -218,7 +230,7 @@ class _LoginState extends State<Login> {
         Container(height: 10),
         InkWell(
           onTap: () {
-            Navigator.of(context).pushReplacementNamed("signup");
+            Navigator.of(context).pushReplacementNamed("actor");
           },
           child: Center(
             child: Column(
@@ -234,7 +246,7 @@ class _LoginState extends State<Login> {
                 GestureDetector(
                   onTap: () {
                     // Navigate to the sign-up page
-                    Navigator.of(context).pushNamed("signup");
+                    Navigator.of(context).pushNamed("actor");
                   },
                   child: Text(
                     "Inscrivez-vous ici",
@@ -260,8 +272,8 @@ class _LoginState extends State<Login> {
         });
       },
       icon: _isSecurePassword
-          ? Icon(Icons.visibility_outlined)
-          : Icon(Icons.visibility_off_outlined),
+          ? Icon(Icons.visibility_off_outlined)
+          : Icon(Icons.visibility_outlined),
       color: Colors.grey,
     );
   }

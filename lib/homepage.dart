@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/components/doctorDetail.dart';
-import 'package:first/components/drawer.dart';
+import 'package:first/patient/drawer.dart';
 import 'package:first/patient/ExercicesCog.dart';
 import 'package:first/patient/ExercicesParole.dart';
 import 'package:first/patient/ExercicesPhy.dart';

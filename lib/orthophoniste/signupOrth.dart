@@ -5,22 +5,26 @@ import 'package:first/components/button.dart';
 import 'package:first/components/textformfield.dart';
 import 'package:flutter/material.dart';
 
-class Signup extends StatefulWidget {
-  const Signup({super.key});
+class SignupOrtho extends StatefulWidget {
+  const SignupOrtho({super.key});
 
   @override
-  State<Signup> createState() => _SignupState();
+  State<SignupOrtho> createState() => _SignupState();
 }
 
-class _SignupState extends State<Signup> {
+class _SignupState extends State<SignupOrtho> {
   TextEditingController username = TextEditingController();
+  TextEditingController exp = TextEditingController();
+  TextEditingController temps = TextEditingController();
+  TextEditingController bio = TextEditingController();
+  TextEditingController surname = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  TextEditingController surname = TextEditingController();
+  TextEditingController tel = TextEditingController();
   TextEditingController Confirmpassword = TextEditingController();
+  var selectedSpec = "Orthophoniste";
 
   GlobalKey<FormState> formState = GlobalKey<FormState>();
-
   @override
   void dispose() {
     super.dispose();
@@ -28,7 +32,10 @@ class _SignupState extends State<Signup> {
     email.dispose();
     password.dispose();
     Confirmpassword.dispose();
+    bio.dispose();
+    exp.dispose();
     surname.dispose();
+    temps.dispose();
   }
 
   Widget build(BuildContext context) {
@@ -41,11 +48,6 @@ class _SignupState extends State<Signup> {
               key: formState,
               child: Column(
                 children: [
-                  Container(
-                    height: 20,
-                    width: 50,
-                    color: Colors.white,
-                  ),
                   Container(
                       padding: EdgeInsets.all(10),
                       child: Image.asset(
@@ -69,11 +71,10 @@ class _SignupState extends State<Signup> {
                           return " champs vide ";
                         }
                       },
-                      hinttext: 'Nom',
+                      hinttext: 'Nom ',
                       mycontroller: username,
                       icon: Icon(Icons.person_4_outlined)),
                   Container(height: 20),
-                  //input phone
                   CustomTextForm(
                       validator: (val) {
                         if (val == "") {
@@ -82,9 +83,9 @@ class _SignupState extends State<Signup> {
                       },
                       hinttext: 'Prénom',
                       mycontroller: surname,
-                      icon: Icon(Icons.person_4)),
-                  Container(height: 20),
+                      icon: Icon(Icons.person_4_rounded)),
 
+                  Container(height: 20),
                   //input email
                   CustomTextForm(
                       validator: (val) {
@@ -95,6 +96,92 @@ class _SignupState extends State<Signup> {
                       hinttext: 'Email',
                       mycontroller: email,
                       icon: Icon(Icons.email_outlined)),
+                  Container(height: 20),
+                  //biographie
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 30,
+                      ),
+                      Text(
+                        "Spécialité:",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.pink),
+                      ),
+                      SizedBox(
+                        width: 50,
+                      ),
+                      DropdownButton(
+                        items: ["Orthophoniste", "Ergothérapeute"]
+                            .map((e) => DropdownMenuItem(
+                                  child: Text("$e"),
+                                  value: e,
+                                ))
+                            .toList(),
+                        onChanged: (val) {
+                          setState(() {
+                            selectedSpec = val!;
+                          });
+                        },
+                        value: selectedSpec,
+                      ),
+                    ],
+                  ),
+                  TextFormField(
+                    validator: (val) {
+                      if (val == "") {
+                        return " champs vide ";
+                      }
+                    },
+                    controller: bio,
+                    maxLines: 5, // Pour permettre plusieurs lignes de texte
+                    decoration: InputDecoration(
+                      hintText: 'Biographie',
+                      icon: Icon(
+                        Icons.wallet_membership_outlined,
+                      ),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
+                  ),
+                  Container(height: 20),
+                  //availability
+                  TextFormField(
+                    validator: (val) {
+                      if (val == "") {
+                        return " champs vide ";
+                      }
+                    },
+                    controller: temps,
+                    decoration: InputDecoration(
+                      hintText: "01 AM /23 PM",
+                      icon: Icon(
+                        Icons.access_time,
+                      ),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
+                  ),
+                  Container(height: 20),
+                  //experience
+                  TextFormField(
+                    validator: (val) {
+                      if (val == "") {
+                        return " champs vide ";
+                      }
+                    },
+                    controller: exp,
+                    decoration: InputDecoration(
+                      hintText: "Expérience",
+                      icon: Icon(
+                        Icons.bar_chart_rounded,
+                      ),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
+                  ),
                   Container(height: 20),
 
                   //input password
@@ -117,10 +204,10 @@ class _SignupState extends State<Signup> {
                       hinttext: 'Confirmer le mot de passe',
                       mycontroller: Confirmpassword,
                       icon: Icon(Icons.vpn_key_outlined)),
-                  Container(height: 20),
                 ],
               ),
             ),
+            Container(height: 20),
             CustomButton(
                 title: 'Inscription',
                 onPressed: () async {
@@ -157,30 +244,49 @@ class _SignupState extends State<Signup> {
                       FirebaseAuth.instance.currentUser!
                           .sendEmailVerification();
                       Navigator.of(context).pushReplacementNamed("login");
-                      Future addUserDetails(String name, String email,
-                          String surname, String mdp, String url) async {
+                      Future addUserDetails(
+                          String nom,
+                          String email,
+                          String spec,
+                          String bio,
+                          String prenom,
+                          String time,
+                          int exp,
+                          String mdp,
+                          String url) async {
                         await FirebaseFirestore.instance
                             .collection('users')
                             .add({
-                          'name': name,
-                          'surname': surname,
+                          'nom': nom,
                           'email': email,
-                          'role': "patient",
+                          'role': spec,
+                          'bio': bio,
+                          'prenom': prenom,
+                          'temps': time,
+                          'exp': exp,
+                          'mot de passe ': mdp,
                           'Date de creation': DateTime.now(),
                           'id': FirebaseAuth.instance.currentUser?.uid,
-                          'mot de passe ': mdp,
                           'image url': url
                         });
 
                         // Set the display name for the user
                         User? user = FirebaseAuth.instance.currentUser;
                         if (user != null) {
-                          await user.updateDisplayName(name);
+                          await user.updateDisplayName(nom);
                         }
                       }
 
-                      addUserDetails(username.text.trim(), email.text.trim(),
-                          surname.text.trim(), password.text.trim(), "none");
+                      addUserDetails(
+                          username.text.trim(),
+                          email.text.trim(),
+                          selectedSpec,
+                          bio.text.trim(),
+                          surname.text.trim(),
+                          temps.text.trim(),
+                          int.parse(exp.text.trim()),
+                          password.text.trim(),
+                          "none");
                     } on FirebaseAuthException catch (e) {
                       if (e.code == 'weak-password') {
                         print('The password provided is too weak.');

@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first/auth/aide.dart';
-import 'package:first/auth/profile.dart';
 import 'package:first/components/My_listTile.dart';
-import 'package:first/homepage.dart';
+import 'package:first/orthophoniste/AideOrtho.dart';
+import 'package:first/orthophoniste/homertho.dart';
+import 'package:first/orthophoniste/profileOrtho.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class MyDrawer extends StatelessWidget {
-  const MyDrawer({super.key});
+class MyDrawerOrtho extends StatelessWidget {
+  const MyDrawerOrtho({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +26,8 @@ class MyDrawer extends StatelessWidget {
             icon: Icons.home,
             title: "Acceuil",
             onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Homepage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => HomeOrtho()));
             },
           ),
           SizedBox(height: 20),
@@ -35,8 +35,8 @@ class MyDrawer extends StatelessWidget {
             icon: Icons.person_4_rounded,
             title: "Compte",
             onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Profil()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ProfileOrtho()));
             },
           ),
           SizedBox(height: 20),
@@ -44,8 +44,8 @@ class MyDrawer extends StatelessWidget {
             icon: Icons.help_outline_rounded,
             title: "Aide ",
             onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Aide()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AideOrtho()));
             },
           ),
           SizedBox(height: 20),

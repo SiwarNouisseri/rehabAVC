@@ -1,6 +1,9 @@
 import 'package:first/auth/Role.dart';
 import 'package:first/auth/actorsauth.dart';
 import 'package:first/auth/login.dart';
+import 'package:first/ergotherapeute/resetergo.dart';
+import 'package:first/orthophoniste/ResetPassword.dart';
+import 'package:first/patient/ResetPatient.dart';
 import 'package:first/patient/profile.dart';
 import 'package:first/auth/signup.dart';
 import 'package:first/ergotherapeute/homeErgo.dart';
@@ -56,6 +59,9 @@ class _MyAppState extends State<MyApp> {
         "signupOrth": (context) => SignupOrtho(),
         "homeOrtho": (context) => HomeOrtho(),
         "homeErgo": (context) => HomeErgo(),
+        "reset": (context) => ResetPassword(),
+        "resetPatient": (context) => ResetPatient(),
+        "resetErgo": (context) => ResetErgo(),
       },
     );
   }

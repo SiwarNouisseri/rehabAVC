@@ -12,14 +12,14 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
-class ProfileOrtho extends StatefulWidget {
-  const ProfileOrtho({Key? key}) : super(key: key);
+class ProfileErgo extends StatefulWidget {
+  const ProfileErgo({Key? key}) : super(key: key);
 
   @override
-  State<ProfileOrtho> createState() => _ProfileOrthoState();
+  State<ProfileErgo> createState() => _ProfileErgoState();
 }
 
-class _ProfileOrthoState extends State<ProfileOrtho> {
+class _ProfileErgoState extends State<ProfileErgo> {
   final usersCollection = FirebaseFirestore.instance.collection("users");
   Future<String?> getimageUrl() async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -181,7 +181,7 @@ class _ProfileOrthoState extends State<ProfileOrtho> {
     GlobalKey<ScaffoldState> scaffoldkey = GlobalKey();
     return Scaffold(
         key: scaffoldkey,
-        drawer: MyDrawerOrtho(),
+        drawer: MyDrawerErgo(),
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('users')
@@ -355,7 +355,7 @@ class _ProfileOrthoState extends State<ProfileOrtho> {
                     child: GestureDetector(
                       onTap: () {
                         // Navigate to the sign-up page
-                        Navigator.of(context).pushNamed("reset");
+                        Navigator.of(context).pushNamed("resetErgo");
                       },
                       child: Container(
                         width: 300,
@@ -446,7 +446,7 @@ class _ProfileOrthoState extends State<ProfileOrtho> {
                       ),
                     ),
                   ),
-                  /*Padding(
+                  Padding(
                     padding: const EdgeInsets.only(
                         right: 20.0, left: 20.0, bottom: 10),
                     child: GestureDetector(
@@ -468,12 +468,12 @@ class _ProfileOrthoState extends State<ProfileOrtho> {
                             Icon(Icons.card_membership, color: Colors.blue),
                             SizedBox(width: 40),
                             Text(
-                              splitBioText(bio ?? ''),
+                              bio ?? '',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontWeight: FontWeight.w300,
                                 color: Colors.black,
-                                fontSize: 12,
+                                fontSize: 17,
                               ),
                             ),
                             Spacer(),
@@ -489,54 +489,11 @@ class _ProfileOrthoState extends State<ProfileOrtho> {
                         ),
                       ),
                     ),
-                  ),*/
-
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        right: 20.0, left: 20.0, bottom: 10),
-                    child: TextFormField(
-                      initialValue: bio,
-                      enabled: false,
-                      readOnly: true,
-                      maxLines: 10,
-                      decoration: InputDecoration(
-                        labelText: 'Bio',
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color:
-                                  Colors.blue), // Couleur de la bordure en bleu
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.card_membership_outlined,
-                          color: Colors.blue,
-                        ),
-                        suffix: Image.asset(
-                          "images/final.png",
-                          width: 20,
-                        ),
-                        // Icon at the beginning
-                      ),
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                    ),
                   ),
                 ]);
               }
             }
           },
         ));
-  }
-
-  String splitBioText(String bioText) {
-    // Split the bio text using comma or period as delimiters
-    List<String> parts = bioText.split(RegExp(r'[,]'));
-
-    // Join the parts with a line break
-    String result = parts.join('\n');
-
-    return result;
   }
 }

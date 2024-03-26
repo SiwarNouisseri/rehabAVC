@@ -15,7 +15,7 @@ class _AideState extends State<AideOrtho> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(" Aide",
+        title: Text(" Réclamation",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.blue[400],
         iconTheme: IconThemeData(

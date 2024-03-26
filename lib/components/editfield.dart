@@ -6,11 +6,12 @@ class EditMe extends StatefulWidget {
   final String title;
   final void Function()? tap;
   EditMe({
-    super.key,
+    Key? key,
     required this.icon,
-    required this.title, this.tap,
+    required this.title,
+    this.tap,
     /*required this.number*/
-  });
+  }) : super(key: key);
 
   @override
   State<EditMe> createState() => _EditMeState();
@@ -48,19 +49,13 @@ class _EditMeState extends State<EditMe> {
             ),
             Spacer(),
             SizedBox(width: 20),
-            //SizedBox(width: widget.number),
             GestureDetector(
-              onTap: tap
+              onTap: widget.tap,
               child: Image.asset(
                 "images/final.png",
                 width: 20,
               ),
             ),
-            /* SizedBox(width: 5),
-            Image.asset(
-              "images/tick-mark.png",
-              width: 20,
-            ),*/
             SizedBox(width: 5),
           ],
         ),

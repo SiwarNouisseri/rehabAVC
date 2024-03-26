@@ -162,8 +162,8 @@ class _SignupState extends State<Signup> {
                         await FirebaseFirestore.instance
                             .collection('users')
                             .add({
-                          'name': name,
-                          'surname': surname,
+                          'nom': name,
+                          'prenom': surname,
                           'email': email,
                           'role': "patient",
                           'Date de creation': DateTime.now(),

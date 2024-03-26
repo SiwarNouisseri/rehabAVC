@@ -1,14 +1,15 @@
-import 'package:first/patient/drawer.dart';
+import 'package:first/ergotherapeute/drawerErgo.dart';
+import 'package:first/orthophoniste/drawerOrth.dart';
 import 'package:flutter/material.dart';
 
-class Aide extends StatefulWidget {
-  const Aide({super.key});
+class AideErgo extends StatefulWidget {
+  const AideErgo({super.key});
 
   @override
-  State<Aide> createState() => _AideState();
+  State<AideErgo> createState() => _AideErgoState();
 }
 
-class _AideState extends State<Aide> {
+class _AideErgoState extends State<AideErgo> {
   TextEditingController problem = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class _AideState extends State<Aide> {
         ),
         titleSpacing: 100.0,
       ),
-      drawer: MyDrawer(),
+      drawer: MyDrawerErgo(),
       body: ListView(
         children: [
           Padding(

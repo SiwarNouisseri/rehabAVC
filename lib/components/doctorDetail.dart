@@ -10,6 +10,7 @@ class DetailDoctor extends StatelessWidget {
     required this.nom,
     required this.specialiste,
     required this.image,
+    required onPressed,
   }) : super(key: key);
 
   @override
@@ -32,7 +33,7 @@ class DetailDoctor extends StatelessWidget {
             SizedBox(height: 8),
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
+              child: Image.network(
                 image,
                 width: 150,
                 height: 120,

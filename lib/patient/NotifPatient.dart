@@ -1,27 +1,22 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first/auth/currentUser.dart';
-import 'package:first/components/notifContainer.dart';
-import 'package:first/orthophoniste/drawerOrth.dart';
+import 'package:first/patient/drawer.dart';
+import 'package:first/patient/notifContPatient.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
 
-class NotifOrtho extends StatefulWidget {
-  const NotifOrtho({Key? key}) : super(key: key);
+class NotifPatient extends StatefulWidget {
+  const NotifPatient({super.key});
 
   @override
-  State<NotifOrtho> createState() => _NotifOrthoState();
+  State<NotifPatient> createState() => _NotifPatientState();
 }
 
-class _NotifOrthoState extends State<NotifOrtho> {
+class _NotifPatientState extends State<NotifPatient> {
   GlobalKey<ScaffoldState> scaffoldkey = GlobalKey();
-  User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         key: scaffoldkey,
-        drawer: MyDrawerOrtho(),
+        drawer: MyDrawer(),
         body: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -73,7 +68,7 @@ class _NotifOrthoState extends State<NotifOrtho> {
                       Padding(
                         padding: const EdgeInsets.only(left: 50),
                         child: Text(
-                          " Mes notifications",
+                          "Mes notifications",
                           style: TextStyle(
                               fontWeight: FontWeight.w800,
                               color: Colors.white,
@@ -85,7 +80,10 @@ class _NotifOrthoState extends State<NotifOrtho> {
                 ),
               ),
               SizedBox(height: 60),
-              Container(height: 800, child: Notif()),
+              Container(
+                height: 800,
+                child: NotifyMe(),
+              ),
             ],
           ),
         ));

@@ -1,20 +1,20 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first/orthophoniste/drawerOrth.dart';
+import 'package:first/ergotherapeute/drawerErgo.dart';
 import 'package:first/orthophoniste/AjouterEx.dart';
 import 'package:first/orthophoniste/mesPatients.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class WelcomePage extends StatefulWidget {
-  const WelcomePage({super.key});
+class WelcomeErgo extends StatefulWidget {
+  const WelcomeErgo({super.key});
 
   @override
-  State<WelcomePage> createState() => _WelcomePageState();
+  State<WelcomeErgo> createState() => _HomeErgoState();
 }
 
-class _WelcomePageState extends State<WelcomePage> {
+class _HomeErgoState extends State<WelcomeErgo> {
   late Future<String?> imageUrlFuture;
   @override
   void initState() {
@@ -43,7 +43,7 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldkey,
-      drawer: MyDrawerOrtho(),
+      drawer: MyDrawerErgo(),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('users')
@@ -64,7 +64,7 @@ class _WelcomePageState extends State<WelcomePage> {
               var nom = snapshot.data!.docs.first.get('nom');
               return ListView(padding: EdgeInsets.zero, children: [
                 Container(
-                    height: 200,
+                    height: 220,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -121,7 +121,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                     height: 10,
                                   ),
                                   Text(
-                                    "Bienvenue    ",
+                                    "Bienvenue ",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w800,
                                         color: Colors.white,
@@ -134,7 +134,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.blue[700],
-                                          fontSize: 22),
+                                          fontSize: 25),
                                     ),
                                   )
                                 ],
@@ -142,7 +142,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             ),
                             SizedBox(width: 20),
                             Padding(
-                              padding: const EdgeInsets.only(top: 0),
+                              padding: const EdgeInsets.only(top: 20, left: 30),
                               child: FutureBuilder<String?>(
                                 future: imageUrlFuture,
                                 builder: (context, snapshot) {
@@ -150,7 +150,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                       ConnectionState.waiting) {
                                     return CircularProgressIndicator();
                                   } else if (snapshot.hasError ||
-                                      snapshot.data == null) {
+                                      snapshot.data == "none") {
                                     return Container(
                                       width: 75,
                                       child: CircleAvatar(
@@ -213,7 +213,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -259,11 +259,12 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
                 ),
                 /* SizedBox(
-                                    height: 40,
-                                  ),*/
+            height: 40,
+          ),*/
 
                 Padding(
-                  padding: const EdgeInsets.only(top: 40, left: 30, right: 30),
+                  padding: const EdgeInsets.only(
+                      top: 40, left: 30, bottom: 8, right: 30),
                   child: Text(
                     "Liste de mes patients :",
                     style: TextStyle(
@@ -273,11 +274,8 @@ class _WelcomePageState extends State<WelcomePage> {
                         color: Colors.indigo),
                   ),
                 ),
-                SizedBox(
-                  width: 60,
-                ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 30.0, bottom: 0),
+                  padding: const EdgeInsets.only(top: 0, bottom: 0),
                   child: Container(
                     height: 200,
                     child: ListView(

@@ -3,9 +3,6 @@ import 'package:first/components/My_listTile.dart';
 import 'package:first/ergotherapeute/aideErgo.dart';
 import 'package:first/ergotherapeute/homeErgo.dart';
 import 'package:first/ergotherapeute/profileErgo.dart';
-import 'package:first/orthophoniste/AideOrtho.dart';
-import 'package:first/orthophoniste/homertho.dart';
-import 'package:first/orthophoniste/profileOrtho.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 

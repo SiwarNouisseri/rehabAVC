@@ -120,7 +120,7 @@ class _DoctorScrollState extends State<DoctorScroll> {
                                   'prenom de patient': prenomPatient,
                                   'image url de patient': urlPatient,
                                   'id de patient': idPatient,
-                                  'timestamp': FieldValue.serverTimestamp(),
+                                  'envoyeé le': FieldValue.serverTimestamp(),
                                 });
                               }
 
@@ -169,8 +169,7 @@ class _DoctorScrollState extends State<DoctorScroll> {
                                   dialogType: DialogType.success,
                                   animType: AnimType.bottomSlide,
                                   title: 'Succès',
-                                  desc:
-                                      'Demande de suivi supprimée avec succès',
+                                  desc: 'Demande de suivi envoyée avec succès',
                                 ).show();
                               }
                             },
@@ -186,7 +185,8 @@ class _DoctorScrollState extends State<DoctorScroll> {
                                   dialogType: DialogType.error,
                                   animType: AnimType.bottomSlide,
                                   title: 'Suppression',
-                                  desc: 'Demande de suivi envoyée avec succès',
+                                  desc:
+                                      'Demande de suivi supprimée avec succès',
                                 ).show();
                               } else {
                                 showDialog(

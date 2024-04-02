@@ -7,14 +7,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
-class NotifOrtho extends StatefulWidget {
-  const NotifOrtho({Key? key}) : super(key: key);
+class NotifErgo extends StatefulWidget {
+  const NotifErgo({Key? key}) : super(key: key);
 
   @override
-  State<NotifOrtho> createState() => _NotifOrthoState();
+  State<NotifErgo> createState() => _NotifErgoState();
 }
 
-class _NotifOrthoState extends State<NotifOrtho> {
+class _NotifErgoState extends State<NotifErgo> {
   GlobalKey<ScaffoldState> scaffoldkey = GlobalKey();
   User? user = FirebaseAuth.instance.currentUser;
   @override
@@ -73,7 +73,7 @@ class _NotifOrthoState extends State<NotifOrtho> {
                       Padding(
                         padding: const EdgeInsets.only(left: 50),
                         child: Text(
-                          " Mes notifications",
+                          "Mes notifications",
                           style: TextStyle(
                               fontWeight: FontWeight.w800,
                               color: Colors.white,

@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:first/components/editfield.dart';
 import 'package:first/ergotherapeute/drawerErgo.dart';
-import 'package:first/orthophoniste/drawerOrth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -446,7 +445,7 @@ class _ProfileErgoState extends State<ProfileErgo> {
                       ),
                     ),
                   ),
-                  Padding(
+                  /*  Padding(
                     padding: const EdgeInsets.only(
                         right: 20.0, left: 20.0, bottom: 10),
                     child: GestureDetector(
@@ -489,11 +488,51 @@ class _ProfileErgoState extends State<ProfileErgo> {
                         ),
                       ),
                     ),
+                  ),*/
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        right: 20.0, left: 20.0, bottom: 10),
+                    child: TextFormField(
+                      initialValue: bio,
+                      enabled: false,
+                      readOnly: true,
+                      maxLines: 6,
+                      decoration: InputDecoration(
+                        labelText: 'Bioghraphie',
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.card_membership_outlined,
+                          color: Colors.blue,
+                        ),
+                        suffix: Image.asset(
+                          "images/final.png",
+                          width: 20,
+                        ),
+                        // Icon at the beginning
+                      ),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
                 ]);
               }
             }
           },
         ));
+  }
+
+  String splitBioText(String bioText) {
+    // Split the bio text using comma or period as delimiters
+    List<String> parts = bioText.split(RegExp(r'[,]'));
+
+    // Join the parts with a line break
+    String result = parts.join('\n');
+
+    return result;
   }
 }

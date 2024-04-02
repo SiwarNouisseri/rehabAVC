@@ -1,3 +1,7 @@
+import 'package:first/admin/listePatient.dart';
+import 'package:first/admin/listeSpecialiste.dart';
+import 'package:first/admin/reclamations.dart';
+import 'package:first/admin/resetAdmin.dart';
 import 'package:first/auth/Role.dart';
 import 'package:first/auth/actorsauth.dart';
 import 'package:first/auth/login.dart';
@@ -62,6 +66,7 @@ class _MyAppState extends State<MyApp> {
         "reset": (context) => ResetPassword(),
         "resetPatient": (context) => ResetPatient(),
         "resetErgo": (context) => ResetErgo(),
+        "resetAdmin": (context) => ResetAdmin(),
       },
     );
   }

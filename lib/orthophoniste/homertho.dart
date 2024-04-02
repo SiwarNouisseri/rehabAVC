@@ -1,16 +1,10 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first/components/curvedBar.dart';
-import 'package:first/orthophoniste/drawerOrth.dart';
-import 'package:first/orthophoniste/AjouterEx.dart';
 import 'package:first/orthophoniste/messageOrtho.dart';
 import 'package:first/orthophoniste/notificationOrtho.dart';
 import 'package:first/orthophoniste/welcome.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
 class HomeOrtho extends StatefulWidget {
   const HomeOrtho({super.key});

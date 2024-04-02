@@ -172,7 +172,8 @@ class _LoginState extends State<Login> {
                           RoleChecker(), // Display RoleChecker widget after email verification
                     ),
                   );
-                  // Navigator.of(context).pushReplacementNamed("homepage");
+                  email.clear();
+                  password.clear();
                 } else {
                   AwesomeDialog(
                     context: context,
@@ -182,6 +183,8 @@ class _LoginState extends State<Login> {
                     desc:
                         'Suivez les instructions dans lemail pour réinitialiser votre mot de passe',
                   ).show();
+                  email.clear();
+                  password.clear();
                 }
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'too-many-requests') {
@@ -192,6 +195,8 @@ class _LoginState extends State<Login> {
                     title: 'Avertissement',
                     desc: 'Compte désactivé pour plusieurs tentatives échouées',
                   ).show();
+                  email.clear();
+                  password.clear();
                 } else {
                   AwesomeDialog(
                     context: context,
@@ -200,6 +205,8 @@ class _LoginState extends State<Login> {
                     title: 'Erreur',
                     desc: 'Coordonnées incorrectes',
                   ).show();
+                  email.clear();
+                  password.clear();
                 }
               }
             } else {

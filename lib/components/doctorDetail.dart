@@ -15,48 +15,59 @@ class DetailDoctor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 200,
-      width: 200,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius:
-            BorderRadius.circular(15), // Move the color property to decoration
-        border: Border.all(
-          color: Colors.blue, // Set the color of the border
-          width: 0.2, // Set the width of the border
-        ),
-      ),
+    return Padding(
+      padding: EdgeInsets.only(left: 15, top: 20),
       child: Container(
-        child: Column(
-          children: [
-            SizedBox(height: 8),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                image,
-                width: 150,
-                height: 120,
-                fit: BoxFit.fill,
+        height: 121,
+        width: 380,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+            color: Colors.blue,
+            width: 0.2,
+          ),
+        ),
+        child: Container(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  SizedBox(height: 8),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(
+                      image,
+                      width: 150,
+                      height: 120,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Column(children: [
+                    Text(
+                      nom,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: Colors.blueGrey[700],
+                        fontSize: 17,
+                      ),
+                    ),
+                    Text(
+                      specialiste,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.blue[200],
+                        fontSize: 17,
+                      ),
+                    ),
+                  ])
+                ],
               ),
-            ),
-            Text(
-              nom,
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-                color: Colors.blueGrey[700],
-                fontSize: 17,
-              ),
-            ),
-            Text(
-              specialiste,
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                color: Colors.blue[200],
-                fontSize: 17,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

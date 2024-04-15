@@ -2,22 +2,18 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/components/doctorDetail.dart';
 import 'package:first/patient/moreaboutDoctor.dart';
 import 'package:flutter/material.dart';
 
 class DoctorScroll extends StatefulWidget {
   final String idPatient;
-  final String urlPatient;
-  final String prenomPatient;
-  final String nomPatient;
 
-  const DoctorScroll(
-      {super.key,
-      required this.idPatient,
-      required this.urlPatient,
-      required this.prenomPatient,
-      required this.nomPatient});
+  const DoctorScroll({
+    super.key,
+    required this.idPatient,
+  });
 
   @override
   State<DoctorScroll> createState() => _DoctorScrollState();
@@ -56,37 +52,83 @@ class _DoctorScrollState extends State<DoctorScroll> {
     }
   }
 
+  TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: SizedBox(
+            height: 40,
+            child: TextFormField(
+              controller: searchController,
+              onChanged: (value) {
+                setState(() {});
+              },
+              decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(40),
+                  borderSide:
+                      BorderSide(color: Colors.blue[300] ?? Colors.blue),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(40),
+                  borderSide:
+                      BorderSide(color: Colors.blue[200] ?? Colors.blue),
+                ),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                filled: true,
+                fillColor: Colors.grey[50] ?? Colors.grey,
+                hintText: 'Rechercher',
+                hintStyle: TextStyle(color: Colors.grey),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+          ),
+        ),
         body: StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('users').where('role',
-          whereIn: ['Orthophoniste', 'Ergothérapeute']).snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else if (snapshot.data!.docs.isEmpty) {
-            return Text('Document does not exist on the database');
-          } else {
+          stream: FirebaseFirestore.instance
+              .collection('users')
+              .orderBy('nom') // Tri par nom
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Something went wrong');
+            }
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            List<DocumentSnapshot> doctors = snapshot.data!.docs;
+            List<DocumentSnapshot> filteredDoctors = doctors.where((doc) {
+              var role = doc.get('role');
+              var nom = doc.get('nom');
+              var prenom = doc.get('prenom');
+              var searchText = searchController.text.toLowerCase();
+              return (role == 'Orthophoniste' || role == 'Ergothérapeute') &&
+                  (nom.toLowerCase().contains(searchText) ||
+                      prenom.toLowerCase().contains(searchText));
+            }).toList();
+
             return ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: snapshot.data!.docs.length,
+              itemCount: filteredDoctors.length,
               itemBuilder: (BuildContext context, int index) {
-                var doctor = snapshot.data!.docs[index];
-                var nom = doctor.get('nom');
-                var role = doctor.get('role');
-                var image = doctor.get('image url');
-                var prenom = doctor.get('prenom');
-                var temps = doctor.get('temps');
-                var years = doctor.get('exp');
-                var bio = doctor.get('bio');
-                var id = doctor.get('id');
-                var url = doctor.get('image url');
+                var document = filteredDoctors[index];
+
+                var nom = document.get('nom');
+                var role = document.get('role');
+                var image = document.get('image url');
+                var prenom = document.get('prenom');
+                var temps = document.get('temps');
+                var years = document.get('exp');
+                var bio = document.get('bio');
+                var id = document.get('id');
+                var url = document.get('image url');
 
                 return GestureDetector(
                   onTap: () {
@@ -100,27 +142,18 @@ class _DoctorScrollState extends State<DoctorScroll> {
                             prenom: prenom,
                             role: role,
                             image: image,
-                            temps: temps,
+                            temps: "ok",
                             years: years,
                             onPressed: () async {
-                              Future addsuivieDetails(
-                                  String idPatient,
-                                  String nomPatient,
-                                  String prenomPatient,
-                                  String urlPatient) async {
+                              Future addsuivieDetails() async {
                                 await FirebaseFirestore.instance
                                     .collection('suivi')
                                     .add({
-                                  'nom de docteur': nom,
-                                  'prenom de docteur': prenom,
-                                  'image url de docteur': url,
+                                  'id de patient': widget.idPatient,
                                   'id de docteur': id,
                                   'status': "en cours de traitement",
-                                  'nom de patient': nomPatient,
-                                  'prenom de patient': prenomPatient,
-                                  'image url de patient': urlPatient,
-                                  'id de patient': idPatient,
-                                  'envoyeé le': FieldValue.serverTimestamp(),
+                                  'envoyé le': FieldValue.serverTimestamp(),
+                                  'accepté le': "pas encore"
                                 });
                               }
 
@@ -156,12 +189,7 @@ class _DoctorScrollState extends State<DoctorScroll> {
                                 // Vous pouvez afficher un message d'erreur à l'utilisateur ici
                               } else {
                                 // Le patient peut envoyer une nouvelle demande de suivi
-                                addsuivieDetails(
-                                  widget.idPatient,
-                                  widget.nomPatient,
-                                  widget.prenomPatient,
-                                  widget.urlPatient,
-                                );
+                                addsuivieDetails();
 
                                 // Afficher un message de succès ou effectuer d'autres actions après l'envoi de la demande
                                 AwesomeDialog(
@@ -226,9 +254,7 @@ class _DoctorScrollState extends State<DoctorScroll> {
                 );
               },
             );
-          }
-        }
-      },
-    ));
+          },
+        ));
   }
 }

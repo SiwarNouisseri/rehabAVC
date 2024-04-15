@@ -18,8 +18,22 @@ class CustomTextForm extends StatelessWidget {
       validator: validator,
       controller: mycontroller,
       decoration: InputDecoration(
-          hintText: hinttext,
-          icon: icon,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(40),
+            borderSide:
+                BorderSide(color: Colors.blue[500] ?? Colors.blue, width: 2),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(40),
+            borderSide:
+                BorderSide(color: Colors.blue[700] ?? Colors.blue, width: 1),
+          ),
+          labelText: hinttext,
+          labelStyle: TextStyle(color: Colors.grey),
+          prefixIcon: Icon(
+            icon.icon,
+            color: Colors.blue[700],
+          ),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
     );
   }

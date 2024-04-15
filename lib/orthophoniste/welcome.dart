@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first/orthophoniste/calendrier.dart';
 import 'package:first/orthophoniste/drawerOrth.dart';
 import 'package:first/orthophoniste/AjouterEx.dart';
+import 'package:first/orthophoniste/envoyerEx.dart';
 import 'package:first/orthophoniste/mesPatients.dart';
+import 'package:first/orthophoniste/profileOrtho.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -162,10 +165,20 @@ class _WelcomePageState extends State<WelcomePage> {
                                   } else {
                                     return Container(
                                       width: 75,
-                                      child: CircleAvatar(
-                                        radius: 40.0,
-                                        backgroundImage:
-                                            NetworkImage(snapshot.data!),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProfileOrtho()),
+                                          );
+                                        },
+                                        child: CircleAvatar(
+                                          radius: 40.0,
+                                          backgroundImage:
+                                              NetworkImage(snapshot.data!),
+                                        ),
                                       ),
                                     );
                                   }
@@ -177,7 +190,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                     )),
                 SizedBox(
-                  height: 40,
+                  height: 60,
                 ),
                 GestureDetector(
                   onTap: () {
@@ -218,7 +231,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AjouterEx()),
+                      MaterialPageRoute(builder: (context) => EnvoyerOrtho()),
                     );
                   },
                   child: Container(
@@ -258,14 +271,10 @@ class _WelcomePageState extends State<WelcomePage> {
                     height: 1,
                   ),
                 ),
-                /* SizedBox(
-                                    height: 40,
-                                  ),*/
-
                 Padding(
                   padding: const EdgeInsets.only(top: 40, left: 30, right: 30),
                   child: Text(
-                    "Liste de mes patients :",
+                    "fixer ma calendrier :",
                     style: TextStyle(
                         fontSize: 21,
                         fontWeight: FontWeight.w700,
@@ -278,20 +287,27 @@ class _WelcomePageState extends State<WelcomePage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 30.0, bottom: 0),
-                  child: Container(
-                    height: 200,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        SizedBox(
-                          width: 20,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 120,
+                        width: 120,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CalendrierOrtho()),
+                            );
+                          },
+                          child: Container(
+                              height: 100,
+                              width: 50,
+                              child: Card(
+                                  child: Image.asset("images/timetable.png"))),
                         ),
-                        Container(
-                            height: 200,
-                            width: MediaQuery.of(context).size.width,
-                            child: MesPatients()),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ]);

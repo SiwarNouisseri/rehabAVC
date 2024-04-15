@@ -10,9 +10,42 @@ class MesPatients extends StatefulWidget {
 }
 
 class _MesPatientsState extends State<MesPatients> {
+  TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: SizedBox(
+          height: 40,
+          child: TextFormField(
+            controller: searchController,
+            onChanged: (value) {
+              setState(() {});
+            },
+            decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(40),
+                borderSide: BorderSide(color: Colors.blue[300] ?? Colors.blue),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(40),
+                borderSide: BorderSide(color: Colors.blue[200] ?? Colors.blue),
+              ),
+              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+              filled: true,
+              fillColor: Colors.grey[50] ?? Colors.grey,
+              hintText: 'Rechercher',
+              hintStyle: TextStyle(color: Colors.grey),
+              prefixIcon: Icon(
+                Icons.search,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+        ),
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('suivi')
@@ -32,8 +65,9 @@ class _MesPatientsState extends State<MesPatients> {
                 width: 370,
                 height: 70,
                 decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    color: Colors.amber),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  color: Colors.amber,
+                ),
                 child: Row(
                   children: [
                     Padding(
@@ -47,47 +81,124 @@ class _MesPatientsState extends State<MesPatients> {
                     Text(
                       "Attendez jusqu'à obtenir des patients ",
                       style: TextStyle(
-                          color: Colors.teal, fontWeight: FontWeight.w500),
+                        color: Colors.teal,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
               );
             } else {
-              return Column(
-                children: [
-                  Container(
-                    height: 200,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: ScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        var document = snapshot.data!.docs[index];
-                        var nom = document.get('nom de patient');
-                        var image = document.get('image url de patient');
-                        var prenom = document.get('prenom de patient');
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var document = snapshot.data!.docs[index];
+                  var idPatient = document.get('id de patient');
 
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: Column(
-                            children: [
-                              CircleAvatar(
-                                radius: 49.0,
-                                backgroundImage: NetworkImage(image),
+                  return StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('users')
+                        .orderBy('nom') // Tri par nom
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Something went wrong');
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+
+                      List<DocumentSnapshot> doctors = snapshot.data!.docs;
+                      List<DocumentSnapshot> filteredDoctors =
+                          doctors.where((doc) {
+                        var id = doc.get('id');
+                        var nom = doc.get('nom');
+                        var prenom = doc.get('prenom');
+                        var searchText = searchController.text.toLowerCase();
+                        return (id == idPatient) &&
+                            (nom.toLowerCase().contains(searchText) ||
+                                prenom.toLowerCase().contains(searchText));
+                      }).toList();
+
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: filteredDoctors.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          var document = filteredDoctors[index];
+                          var image = document.get('image url');
+                          var nom = document.get('nom');
+                          var prenom = document.get('prenom');
+
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                              left: 10,
+                              right: 10,
+                              top: 10,
+                              bottom: 10,
+                            ),
+                            child: Container(
+                              height: 70,
+                              width: 400,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(60)),
+                                color: Colors.blue[50],
                               ),
-                              Text(nom),
-                              Text(prenom),
-                              Row(
-                                children: [],
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 1,
+                                  ),
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 3,
+                                      ),
+                                      CircleAvatar(
+                                        radius: 34.0,
+                                        backgroundImage: NetworkImage(image),
+                                      ),
+                                      SizedBox(
+                                        width: 30,
+                                      ),
+                                      Text(
+                                        nom,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.blue,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        prenom,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.blue,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Icon(
+                                        Icons.arrow_circle_right_outlined,
+                                        color: Colors.blue,
+                                      ),
+                                      SizedBox(width: 20),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
               );
             }
           }

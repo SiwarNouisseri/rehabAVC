@@ -494,24 +494,35 @@ class _ProfileErgoState extends State<ProfileErgo> {
                         right: 20.0, left: 20.0, bottom: 10),
                     child: TextFormField(
                       initialValue: bio,
-                      enabled: false,
+                      //enabled: false,
                       readOnly: true,
-                      maxLines: 6,
+                      maxLines: 10,
                       decoration: InputDecoration(
-                        labelText: 'Bioghraphie',
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(15),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide(
+                              color: Colors.blue[500] ?? Colors.blue,
+                              width: 0.7),
                         ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide(
+                              color: Colors.blue[500] ?? Colors.blue,
+                              width: 0.7),
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12)),
                         prefixIcon: Icon(
                           Icons.card_membership_outlined,
                           color: Colors.blue,
                         ),
-                        suffix: Image.asset(
-                          "images/final.png",
-                          width: 20,
+                        suffix: GestureDetector(
+                          onTap: () => editField('bio', 'Biographie', context),
+                          child: Image.asset(
+                            "images/final.png",
+                            width: 20,
+                          ),
                         ),
-                        // Icon at the beginning
                       ),
                       style: TextStyle(
                         fontSize: 16,

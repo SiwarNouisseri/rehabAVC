@@ -60,99 +60,129 @@ class _NotifyMeState extends State<NotifyMe> {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (BuildContext context, int index) {
                       var document = snapshot.data!.docs[index];
-                      var prenom = document.get('prenom de docteur');
-                      var nom = document.get('nom de docteur');
+                      var idDoc = document.get('id de docteur');
 
                       var temps = document.get('acceptée le');
 
-                      var image = document.get('image url de docteur');
                       DateTime date = temps.toDate();
                       int jour = date.day; // Jour du mois (1-31)
                       int mois = date.month; // Mois (1-12)
                       int annee = date.year; // Année
                       int heure = date.hour; // Heure (0-23)
                       int minute = date.minute; // Minute (0-59)
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 12, right: 12),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 110,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(10)),
-                                color: Colors.blue[50],
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: 400,
-                                    child: Row(
-                                      children: [
-                                        SizedBox(width: 5),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8.0),
-                                          child: Container(
-                                            width: 50,
-                                            child: CircleAvatar(
-                                              radius: 25.0,
-                                              backgroundImage:
-                                                  NetworkImage(image),
+                      return StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('users')
+                            .where('id', isEqualTo: idDoc)
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                                child:
+                                    CircularProgressIndicator()); // Show loading indicator while fetching data
+                          } else {
+                            if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else if (snapshot.data!.docs.isEmpty) {
+                              return Text(
+                                  'Document does not exist on the database');
+                            } else {
+                              var prenom =
+                                  snapshot.data!.docs.first.get('prenom');
+                              var nom = snapshot.data!.docs.first.get('nom');
+
+                              var image =
+                                  snapshot.data!.docs.first.get('image url');
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 12, right: 12),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 110,
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10)),
+                                        color: Colors.blue[50],
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            width: 400,
+                                            child: Row(
+                                              children: [
+                                                SizedBox(width: 5),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 8.0),
+                                                  child: Container(
+                                                    width: 50,
+                                                    child: CircleAvatar(
+                                                      radius: 25.0,
+                                                      backgroundImage:
+                                                          NetworkImage(image),
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text(
+                                                  prenom +
+                                                      " " +
+                                                      nom +
+                                                      "\n Vous avez accepté votre demande de suivi ",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.blueGrey[700],
+                                                    fontSize: 13,
+                                                  ),
+                                                ),
+                                                Spacer(),
+                                                SizedBox(width: 10),
+                                                SizedBox(width: 10),
+                                              ],
                                             ),
                                           ),
-                                        ),
-                                        SizedBox(width: 5),
-                                        Text(
-                                          prenom +
-                                              " " +
-                                              nom +
-                                              "\n Vous a accepté votre demande de suivi ",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.blueGrey[700],
-                                            fontSize: 13,
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 100),
+                                            child: Text(
+                                              "Acceptée le " +
+                                                  "$jour" +
+                                                  "/" +
+                                                  "$mois" +
+                                                  "/" +
+                                                  "$annee" +
+                                                  " " +
+                                                  "à" +
+                                                  " "
+                                                      "$heure" +
+                                                  ":" +
+                                                  "$minute",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.blue[300],
+                                                fontSize: 12,
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                        Spacer(),
-                                        SizedBox(width: 10),
-                                        SizedBox(width: 10),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 100),
-                                    child: Text(
-                                      "Acceptée le " +
-                                          "$jour" +
-                                          "/" +
-                                          "$mois" +
-                                          "/" +
-                                          "$annee" +
-                                          " " +
-                                          "à" +
-                                          " "
-                                              "$heure" +
-                                          ":" +
-                                          "$minute",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.blue[300],
-                                        fontSize: 12,
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                          ],
-                        ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          }
+                        },
                       );
                     },
                   ),

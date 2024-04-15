@@ -64,7 +64,7 @@ class _AideState extends State<Aide> {
                         controller: problem,
                         maxLines: 5, // Pour permettre plusieurs lignes de texte
                         decoration: const InputDecoration(
-                          hintText: 'Décrivez votre problème ici ......... ',
+                          hintText: 'Décrivez votre problème içi ......... ',
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.lightBlue),
                           ),
@@ -78,6 +78,9 @@ class _AideState extends State<Aide> {
                     Column(children: [
                       MaterialButton(
                         minWidth: 200,
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.white, width: 2.0),
+                            borderRadius: BorderRadius.circular((90))),
                         color: Colors.blue[400],
                         padding: EdgeInsets.all(8.0),
                         onPressed: () {

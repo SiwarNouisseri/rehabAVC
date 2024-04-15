@@ -1,0 +1,232 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first/components/displayVideoDoc.dart';
+import 'package:first/orthophoniste/modifierex.dart';
+import 'package:flutter/material.dart';
+
+class Try extends StatefulWidget {
+  const Try({Key? key}) : super(key: key);
+
+  @override
+  State<Try> createState() => _TryState();
+}
+
+class _TryState extends State<Try> {
+  late CollectionReference<Map<String, dynamic>> exerciceref;
+  final TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    exerciceref = FirebaseFirestore.instance.collection("exercices");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: SizedBox(
+          height: 40,
+          child: TextFormField(
+            controller: searchController,
+            onChanged: (value) {
+              setState(() {});
+            },
+            decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(40),
+                borderSide: BorderSide(color: Colors.blue[300] ?? Colors.blue),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(40),
+                borderSide: BorderSide(color: Colors.blue[200] ?? Colors.blue),
+              ),
+              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+              filled: true,
+              fillColor: Colors.grey[50] ?? Colors.grey,
+              hintText: 'Rechercher',
+              hintStyle: TextStyle(color: Colors.grey),
+              prefixIcon: Icon(
+                Icons.search,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+        ),
+      ),
+      body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        future: exerciceref
+            .where('id de docteur',
+                isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .get(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('No data available'));
+          } else {
+            List<DocumentSnapshot> doctors = snapshot.data!.docs;
+            List<DocumentSnapshot> filteredDoctors = doctors.where((doc) {
+              var nom = doc.get('nom');
+
+              var searchText = searchController.text.toLowerCase();
+              return nom.toLowerCase().contains(searchText);
+            }).toList();
+            return ListView.builder(
+              itemCount: filteredDoctors.length,
+              itemBuilder: (context, index) {
+                var document = filteredDoctors[index];
+                final nom = document.get('nom');
+                final url = document.get('urlvideo');
+                final description = document.get('description');
+
+                // var doc = snapshot.data!.docs[index];
+                return Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Card(
+                    color: Colors.grey[50],
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Row(children: [
+                            Text(
+                              "Exercice",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                color: Colors.blueGrey,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              " ${index + 1} : " + " ",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                color: Colors.blueGrey,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              nom,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                color: Colors.blue,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Spacer(),
+                            PopupMenuButton(
+                              itemBuilder: (context) => [
+                                PopupMenuItem(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              EditEx(url: url)),
+                                    );
+                                  },
+                                  child: Row(children: [
+                                    Icon(
+                                      Icons.remove_red_eye_outlined,
+                                      color: Colors.blueGrey,
+                                    ), // Icon
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10.0),
+                                      child: Text('Consulter'),
+                                    ),
+                                  ]),
+                                ),
+                                PopupMenuItem(
+                                  child: Row(children: [
+                                    Icon(
+                                      Icons.mode,
+                                      color: Colors.blueGrey,
+                                    ), // Icon
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10.0),
+                                      child: Text('Modifier'),
+                                    ),
+                                  ]),
+                                ),
+                                PopupMenuItem(
+                                  child: Row(children: [
+                                    Icon(
+                                      Icons.share,
+                                      color: Colors.blueGrey,
+                                    ), // Icon
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10.0),
+                                      child: Text('Envoyer'),
+                                    ),
+                                  ]),
+                                ),
+                              ],
+                              child: Icon(
+                                Icons.more_vert,
+                                size: 28.0,
+                                color: Colors.blueGrey,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ]),
+                          SizedBox(height: 20),
+                          Text(
+                            description,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                              fontSize: 13,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Spacer(),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ModifierExercice()),
+                                  );
+                                },
+                                child: Image.asset(
+                                  "images/edit.png",
+                                  width: 25,
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              GestureDetector(
+                                onTap: () => {},
+                                child: Image.asset(
+                                  "images/binbin.png",
+                                  width: 25,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+        },
+      ),
+    );
+  }
+}

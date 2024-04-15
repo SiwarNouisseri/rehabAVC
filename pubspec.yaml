@@ -29,10 +29,13 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   animated_icon: ^0.0.9
+  appinio_video_player: ^1.3.0
   awesome_dialog: ^3.2.0
+  chewie: ^1.5.0
   cloud_firestore: ^4.15.8
   cupertino_icons: ^1.0.6
   curved_navigation_bar: ^1.0.3
+  dropdown_button2: ^2.3.9
   firebase_app_check: ^0.2.1+17
   firebase_auth: ^4.17.8
   firebase_core: ^2.27.0
@@ -48,7 +51,9 @@ dependencies:
   google_sign_in: ^6.2.1
   iconsax: ^0.0.8
   image_picker: ^1.0.7
+  intl: ^0.18.1
   loading_animation_widget: ^1.2.1
+  video_player: ^2.6.0
   
 
 

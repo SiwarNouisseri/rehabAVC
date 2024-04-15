@@ -119,13 +119,6 @@ class _MoreABoutDocState extends State<MoreABoutDoc> {
                               color: Colors.indigo,
                             ),
                             SizedBox(width: 10),
-                            Text(
-                              "+150 Patients",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                  color: Colors.indigo),
-                            ),
                           ],
                         ),
                       ),
@@ -188,7 +181,7 @@ class _MoreABoutDocState extends State<MoreABoutDoc> {
               ),
               Icon(
                 CupertinoIcons.videocam_circle_fill,
-                color: Colors.green,
+                color: const Color.fromARGB(255, 35, 197, 40),
                 size: 38,
               ),
             ]),
@@ -223,7 +216,10 @@ class _MoreABoutDocState extends State<MoreABoutDoc> {
               Column(children: [
                 MaterialButton(
                     minWidth: 20,
-                    color: Colors.green[300],
+                    color: const Color.fromARGB(255, 35, 197, 40),
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.white, width: 2),
+                        borderRadius: BorderRadius.circular((90))),
                     child: Text("Demander un suivi",
                         style: TextStyle(
                             fontWeight: FontWeight.w700,
@@ -238,6 +234,9 @@ class _MoreABoutDocState extends State<MoreABoutDoc> {
                 MaterialButton(
                     minWidth: 20,
                     color: Colors.red,
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.white, width: 2.0),
+                        borderRadius: BorderRadius.circular((90))),
                     child: Text("Annuler un suivi",
                         style: TextStyle(
                             fontWeight: FontWeight.w700,

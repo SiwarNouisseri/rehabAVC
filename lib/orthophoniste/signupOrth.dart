@@ -41,7 +41,10 @@ class _SignupState extends State<SignupOrtho> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.only(
+          left: 20,
+          right: 20,
+        ),
         child: ListView(
           children: [
             Form(
@@ -49,19 +52,19 @@ class _SignupState extends State<SignupOrtho> {
               child: Column(
                 children: [
                   Container(
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.only(left: 10, right: 10, top: 2),
                       child: Image.asset(
                         "images/neuro.png",
-                        width: 400,
+                        width: 300,
                         height: 200,
                       )),
-                  Container(height: 20),
+                  Container(height: 5),
                   Text(
                     "Registration",
                     style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w700,
-                        color: Colors.blue[800]),
+                        color: Colors.blue[700]),
                   ),
                   Container(height: 30),
                   //input username
@@ -97,7 +100,89 @@ class _SignupState extends State<SignupOrtho> {
                       mycontroller: email,
                       icon: Icon(Icons.email_outlined)),
                   Container(height: 20),
-                  //biographie
+
+                  TextFormField(
+                    validator: (val) {
+                      if (val == "") {
+                        return " champs vide ";
+                      }
+                    },
+
+                    controller: bio,
+                    maxLines: 5, // Pour permettre plusieurs lignes de texte
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(40),
+                        borderSide: BorderSide(
+                            color: Colors.blue[500] ?? Colors.blue, width: 2),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(40),
+                        borderSide: BorderSide(
+                            color: Colors.blue[700] ?? Colors.blue, width: 1),
+                      ),
+                      labelText: 'Biographie',
+                      labelStyle: TextStyle(color: Colors.grey),
+                      prefixIcon: Icon(Icons.wallet_membership_outlined,
+                          color: Colors.blue[700]),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
+                  ),
+
+                  Container(height: 20),
+                  //experience
+                  TextFormField(
+                    validator: (val) {
+                      if (val == "") {
+                        return " champs vide ";
+                      }
+                    },
+                    controller: exp,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(40),
+                        borderSide: BorderSide(
+                            color: Colors.blue[500] ?? Colors.blue, width: 2),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(40),
+                        borderSide: BorderSide(
+                            color: Colors.blue[700] ?? Colors.blue, width: 1),
+                      ),
+                      labelText: "Expérience",
+                      labelStyle: TextStyle(color: Colors.grey),
+                      prefixIcon: Icon(Icons.bar_chart_rounded,
+                          color: Colors.blue[700]),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
+                  ),
+                  Container(height: 20),
+
+                  //input password
+                  CustomTextForm(
+                      validator: (val) {
+                        if (val == "") {
+                          return " champs vide ";
+                        }
+                      },
+                      hinttext: 'Mot de passe',
+                      mycontroller: password,
+                      icon: Icon(Icons.lock_outline_rounded)),
+                  Container(height: 20),
+                  CustomTextForm(
+                      validator: (val) {
+                        if (val == "") {
+                          return " champs vide ";
+                        }
+                      },
+                      hinttext: 'Confirmer le mot de passe',
+                      mycontroller: Confirmpassword,
+                      icon: Icon(Icons.vpn_key_outlined)),
+                  SizedBox(
+                    height: 30,
+                  ),
                   Row(
                     children: [
                       SizedBox(
@@ -129,81 +214,6 @@ class _SignupState extends State<SignupOrtho> {
                       ),
                     ],
                   ),
-                  TextFormField(
-                    validator: (val) {
-                      if (val == "") {
-                        return " champs vide ";
-                      }
-                    },
-                    controller: bio,
-                    maxLines: 5, // Pour permettre plusieurs lignes de texte
-                    decoration: InputDecoration(
-                      hintText: 'Biographie',
-                      icon: Icon(
-                        Icons.wallet_membership_outlined,
-                      ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                    ),
-                  ),
-                  Container(height: 20),
-                  //availability
-                  TextFormField(
-                    validator: (val) {
-                      if (val == "") {
-                        return " champs vide ";
-                      }
-                    },
-                    controller: temps,
-                    decoration: InputDecoration(
-                      hintText: "01 AM /23 PM",
-                      icon: Icon(
-                        Icons.access_time,
-                      ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                    ),
-                  ),
-                  Container(height: 20),
-                  //experience
-                  TextFormField(
-                    validator: (val) {
-                      if (val == "") {
-                        return " champs vide ";
-                      }
-                    },
-                    controller: exp,
-                    decoration: InputDecoration(
-                      hintText: "Expérience",
-                      icon: Icon(
-                        Icons.bar_chart_rounded,
-                      ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                    ),
-                  ),
-                  Container(height: 20),
-
-                  //input password
-                  CustomTextForm(
-                      validator: (val) {
-                        if (val == "") {
-                          return " champs vide ";
-                        }
-                      },
-                      hinttext: 'Mot de passe',
-                      mycontroller: password,
-                      icon: Icon(Icons.lock_outline_rounded)),
-                  Container(height: 20),
-                  CustomTextForm(
-                      validator: (val) {
-                        if (val == "") {
-                          return " champs vide ";
-                        }
-                      },
-                      hinttext: 'Confirmer le mot de passe',
-                      mycontroller: Confirmpassword,
-                      icon: Icon(Icons.vpn_key_outlined)),
                 ],
               ),
             ),

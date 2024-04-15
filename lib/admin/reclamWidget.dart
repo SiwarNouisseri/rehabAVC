@@ -86,20 +86,7 @@ class _ReclamWidgetState extends State<ReclamWidget> {
                                             child: ListView(
                                               children: [
                                                 SizedBox(
-                                                  height: 20,
-                                                ),
-                                                Text(
-                                                  "Id :"
-                                                          " " +
-                                                      id,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.green,
-                                                    fontSize: 10,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 20,
+                                                  height: 50,
                                                 ),
                                                 Text(
                                                   nom + " " + prenom,

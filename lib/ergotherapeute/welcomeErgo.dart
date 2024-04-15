@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first/ergotherapeute/EnvoyerErgo.dart';
 import 'package:first/ergotherapeute/drawerErgo.dart';
+import 'package:first/ergotherapeute/profileErgo.dart';
 import 'package:first/orthophoniste/AjouterEx.dart';
 import 'package:first/orthophoniste/mesPatients.dart';
 import 'package:flutter/cupertino.dart';
@@ -161,13 +163,22 @@ class _HomeErgoState extends State<WelcomeErgo> {
                                     );
                                   } else {
                                     return Container(
-                                      width: 75,
-                                      child: CircleAvatar(
-                                        radius: 40.0,
-                                        backgroundImage:
-                                            NetworkImage(snapshot.data!),
-                                      ),
-                                    );
+                                        width: 75,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProfileErgo()),
+                                            );
+                                          },
+                                          child: CircleAvatar(
+                                            radius: 40.0,
+                                            backgroundImage:
+                                                NetworkImage(snapshot.data!),
+                                          ),
+                                        ));
                                   }
                                 },
                               ),
@@ -218,7 +229,7 @@ class _HomeErgoState extends State<WelcomeErgo> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AjouterEx()),
+                      MaterialPageRoute(builder: (context) => EnvoyerEgo()),
                     );
                   },
                   child: Container(

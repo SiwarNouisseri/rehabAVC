@@ -42,6 +42,7 @@ class _ProfileOrthoState extends State<ProfileOrtho> {
   Future pickImage() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+
       if (image == null) return;
       final imageTemporary = File(image.path);
       var imagename = basename(image!.path);
@@ -446,76 +447,40 @@ class _ProfileOrthoState extends State<ProfileOrtho> {
                       ),
                     ),
                   ),
-                  /*Padding(
-                    padding: const EdgeInsets.only(
-                        right: 20.0, left: 20.0, bottom: 10),
-                    child: GestureDetector(
-                      onTap: () => editField('bio', 'Biographie', context),
-                      child: Container(
-                        width: 300,
-                        height: 110,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(
-                            color: Colors.blue,
-                            width: 1,
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            SizedBox(width: 20),
-                            Icon(Icons.card_membership, color: Colors.blue),
-                            SizedBox(width: 40),
-                            Text(
-                              splitBioText(bio ?? ''),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w300,
-                                color: Colors.black,
-                                fontSize: 12,
-                              ),
-                            ),
-                            Spacer(),
-                            SizedBox(width: 20),
-                            //SizedBox(width: widget.number),
-                            Image.asset(
-                              "images/final.png",
-                              width: 20,
-                            ),
-
-                            SizedBox(width: 5),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),*/
-
                   Padding(
                     padding: const EdgeInsets.only(
                         right: 20.0, left: 20.0, bottom: 10),
                     child: TextFormField(
                       initialValue: bio,
-                      enabled: false,
+                      //enabled: false,
                       readOnly: true,
                       maxLines: 10,
                       decoration: InputDecoration(
-                        labelText: 'Bio',
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color:
-                                  Colors.blue), // Couleur de la bordure en bleu
+                        enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                              color: Colors.blue[500] ?? Colors.blue,
+                              width: 0.7),
                         ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                              color: Colors.blue[500] ?? Colors.blue,
+                              width: 0.7),
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15)),
                         prefixIcon: Icon(
                           Icons.card_membership_outlined,
                           color: Colors.blue,
                         ),
-                        suffix: Image.asset(
-                          "images/final.png",
-                          width: 20,
+                        suffix: GestureDetector(
+                          onTap: () => editField('bio', 'Biographie', context),
+                          child: Image.asset(
+                            "images/final.png",
+                            width: 20,
+                          ),
                         ),
-                        // Icon at the beginning
                       ),
                       style: TextStyle(
                         fontSize: 16,

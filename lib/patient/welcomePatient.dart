@@ -2,11 +2,13 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first/patient/doctor.dart';
+
 import 'package:first/patient/drawer.dart';
 import 'package:first/patient/ExercicesCog.dart';
 import 'package:first/patient/ExercicesParole.dart';
 import 'package:first/patient/ExercicesPhy.dart';
+import 'package:first/patient/mesDocteurs.dart';
+import 'package:first/patient/profile.dart';
 import 'package:first/patient/progression.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -148,7 +150,7 @@ class _WelcomePatientState extends State<WelcomePatient> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Colors.blue[700],
-                                              fontSize: 25),
+                                              fontSize: 23),
                                         ),
                                       )
                                     ],
@@ -171,11 +173,20 @@ class _WelcomePatientState extends State<WelcomePatient> {
                                               AssetImage("images/avatar.jpeg"),
                                         );
                                       } else {
-                                        return CircleAvatar(
-                                          radius: 40.0,
-                                          backgroundImage:
-                                              NetworkImage(snapshot.data!),
-                                        );
+                                        return GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Profil()),
+                                              );
+                                            },
+                                            child: CircleAvatar(
+                                              radius: 40.0,
+                                              backgroundImage:
+                                                  NetworkImage(snapshot.data!),
+                                            ));
                                       }
                                     },
                                   ),
@@ -185,7 +196,7 @@ class _WelcomePatientState extends State<WelcomePatient> {
                           ),
                         )),
                     SizedBox(
-                      height: 40,
+                      height: 50,
                     ),
                     GestureDetector(
                       onTap: () {
@@ -225,6 +236,9 @@ class _WelcomePatientState extends State<WelcomePatient> {
                           ),
                         ),
                       ),
+                    ),
+                    SizedBox(
+                      height: 15,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(20.0),
@@ -349,17 +363,18 @@ class _WelcomePatientState extends State<WelcomePatient> {
                       padding: const EdgeInsets.only(
                           left: 100.0, right: 100.0, top: 20),
                       child: Container(
-                        height: 1, // Hauteur du trait de séparation
-                        color: Colors.grey, // Couleur du trait de séparation
-                        margin: EdgeInsets.symmetric(
-                            vertical: 10), // Marge autour du trait
+                        height: 1,
+                        color: Colors.grey,
+                        margin: EdgeInsets.symmetric(vertical: 10),
                       ),
                     ),
-                    // ignore: prefer_const_constructors
+                    SizedBox(
+                      height: 20,
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                       child: Text(
-                        "Contactez les spécialistes : ",
+                        "Mes docteurs : ",
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             color: Colors.blue,
@@ -370,15 +385,20 @@ class _WelcomePatientState extends State<WelcomePatient> {
                       height: 10,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 20.0),
+                      padding: const EdgeInsets.only(top: 0, bottom: 0),
                       child: Container(
-                        width: 100,
                         height: 200,
-                        child: DoctorScroll(
-                          idPatient: id,
-                          prenomPatient: prenom,
-                          nomPatient: nom,
-                          urlPatient: image,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Container(
+                                height: 200,
+                                width: MediaQuery.of(context).size.width,
+                                child: MesDocteurs()),
+                          ],
                         ),
                       ),
                     ),

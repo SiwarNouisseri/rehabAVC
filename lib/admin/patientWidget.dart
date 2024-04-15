@@ -10,186 +10,227 @@ class PatientWidget extends StatefulWidget {
 }
 
 class _PatientWidgetState extends State<PatientWidget> {
+  TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: SizedBox(
+            height: 40,
+            child: TextFormField(
+              controller: searchController,
+              onChanged: (value) {
+                setState(() {});
+              },
+              decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(40),
+                  borderSide:
+                      BorderSide(color: Colors.blue[300] ?? Colors.blue),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(40),
+                  borderSide:
+                      BorderSide(color: Colors.blue[200] ?? Colors.blue),
+                ),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                filled: true,
+                fillColor: Colors.grey[50] ?? Colors.grey,
+                hintText: 'Rechercher',
+                hintStyle: TextStyle(color: Colors.grey),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+          ),
+        ),
         body: StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('users')
-          .where('role', isEqualTo: "patient")
-          .snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-              child:
-                  CircularProgressIndicator()); // Show loading indicator while fetching data
-        } else {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else if (snapshot.data!.docs.isEmpty) {
-            return Text('Document does not exist on the database');
-          } else {
-            return Column(children: [
-              Container(
-                  height: MediaQuery.of(context).size.height,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: ScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        var document = snapshot.data!.docs[index];
-                        var nom = document.get('nom');
-                        var image = document.get('image url');
-                        var prenom = document.get('prenom');
-                        var mail = document.get('email');
-                        var temps = document.get('Date de creation');
-                        var idPatient = document.get('id');
-                        var mdp = document.get('mot de passe ');
-                        DateTime date = temps.toDate();
-                        int jour = date.day; // Jour du mois (1-31)
-                        int mois = date.month; // Mois (1-12)
-                        int annee = date.year; // Année
-                        int heure = date.hour; // Heure (0-23)
-                        int minute = date.minute; // Minute (0-59)
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
+          stream: FirebaseFirestore.instance
+              .collection('users')
+              .orderBy('nom') // Tri par nom
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Something went wrong');
+            }
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Text("Loading");
+            }
+
+            List<DocumentSnapshot> doctors = snapshot.data!.docs;
+            List<DocumentSnapshot> filteredDoctors = doctors.where((doc) {
+              var role = doc.get('role');
+              var nom = doc.get('nom');
+              var prenom = doc.get('prenom');
+              var searchText = searchController.text.toLowerCase();
+              return (role == 'patient') &&
+                  (nom.toLowerCase().contains(searchText) ||
+                      prenom.toLowerCase().contains(searchText));
+            }).toList();
+
+            return ListView.builder(
+                itemCount: filteredDoctors.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var document = filteredDoctors[index];
+                  var image = document.get('image url');
+                  var nom = document.get('nom');
+                  var prenom = document.get('prenom');
+                  var mail = document.get('email');
+                  var temps = document.get('Date de creation');
+                  var idDoc = document.get('id');
+                  var mdp = document.get('mot de passe ');
+                  var role = document.get('role');
+                  DateTime date = temps.toDate();
+                  int jour = date.day; // Jour du mois (1-31)
+                  int mois = date.month; // Mois (1-12)
+                  int annee = date.year; // Année
+                  int heure = date.hour; // Heure (0-23)
+                  int minute = date.minute; // Minute (0-59)
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          height: 200,
+                          width: 400,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            color: Colors.lightBlue[50],
+                          ),
                           child: Column(
                             children: [
                               Container(
-                                height: 200,
-                                width: 400,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                  color: Colors.lightBlue[50],
-                                ),
-                                child: Column(
+                                width: 800,
+                                child: Row(
                                   children: [
+                                    SizedBox(width: 5),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Container(
+                                        width: 50,
+                                        child: CircleAvatar(
+                                          radius: 25.0,
+                                          backgroundImage: NetworkImage(image),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 5),
                                     Container(
-                                      width: 800,
-                                      child: Row(
+                                      height: 150,
+                                      width: 250,
+                                      child: ListView(
                                         children: [
-                                          SizedBox(width: 5),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 8.0),
-                                            child: Container(
-                                              width: 50,
-                                              child: CircleAvatar(
-                                                radius: 25.0,
-                                                backgroundImage:
-                                                    NetworkImage(image),
-                                              ),
+                                          SizedBox(
+                                            height: 50,
+                                          ),
+                                          Text(
+                                            "Nom :" +
+                                                " " +
+                                                nom +
+                                                "\nPrénom :" +
+                                                " " +
+                                                prenom,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.blueGrey[700],
+                                              fontSize: 12,
                                             ),
                                           ),
-                                          SizedBox(width: 5),
-                                          Container(
-                                            height: 150,
-                                            width: 250,
-                                            child: ListView(
+                                          Text(
+                                            "Email :" + " " + mail,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.blueGrey[700],
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          Text(
+                                            "Mot de passe :" + " " + mdp,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.blueGrey[700],
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    Container(
+                                      height: 100,
+                                      width: 71,
+                                      child: ListView(
+                                        children: [
+                                          SizedBox(
+                                            height: 40,
+                                          ),
+                                          GestureDetector(
+                                            //   onTap: () => deleteUserData(idDoc),
+                                            child: Column(
                                               children: [
-                                                SizedBox(
-                                                  height: 20,
-                                                ),
-                                                Text(
-                                                  "Id :"
-                                                          " " +
-                                                      idPatient,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.green,
-                                                    fontSize: 10,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 20,
-                                                ),
-                                                Text(
-                                                  "Nom :" +
-                                                      " " +
-                                                      nom +
-                                                      "\nPrénom :" +
-                                                      " " +
-                                                      prenom,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.blueGrey[700],
-                                                    fontSize: 12,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "Email :" + " " + mail,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.blueGrey[700],
-                                                    fontSize: 12,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "Mot de passe :" + " " + mdp,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.blueGrey[700],
-                                                    fontSize: 12,
+                                                Container(
+                                                  width: 30,
+                                                  child: Image.asset(
+                                                    "images/bin.png",
                                                   ),
                                                 ),
                                               ],
                                             ),
                                           ),
-                                          Spacer(),
-                                          GestureDetector(
-                                            /* onTap: () => removeFollowUpRequest(
-                                                idPatient),*/
-                                            child: Image.asset(
-                                              "images/bin.png",
-                                              width: 25,
-                                            ),
-                                          ),
-                                          SizedBox(width: 10),
                                         ],
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 10, left: 200),
-                                      child: Text(
-                                        "Crée le " +
-                                            "$jour" +
-                                            "/" +
-                                            "$mois" +
-                                            "/" +
-                                            "$annee" +
-                                            " " +
-                                            "à" +
-                                            " "
-                                                "$heure" +
-                                            ":" +
-                                            "$minute",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.blue[300],
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
+                                    SizedBox(width: 10),
                                   ],
                                 ),
                               ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 10, left: 200),
+                                child: Text(
+                                  "Crée le " +
+                                      "$jour" +
+                                      "/" +
+                                      "$mois" +
+                                      "/" +
+                                      "$annee" +
+                                      " " +
+                                      "à" +
+                                      " "
+                                          "$heure" +
+                                      ":" +
+                                      "$minute",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.blue[300],
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
                               SizedBox(
-                                height: 20,
+                                height: 5,
                               ),
                             ],
                           ),
-                        );
-                      }))
-            ]);
-          }
-        }
-      },
-    ));
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    ),
+                  );
+                });
+          },
+        ));
   }
 }

@@ -73,11 +73,11 @@ class _LoginState extends State<Login> {
               Text(
                 "Bienvenue",
                 style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.blue[800]),
+                    fontSize: 35,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.blue[700]),
               ),
-              Container(height: 100),
+              Container(height: 60),
               CustomTextForm(
                   validator: (val) {
                     if (val == "") {
@@ -97,8 +97,22 @@ class _LoginState extends State<Login> {
                 obscureText: _isSecurePassword,
                 controller: password,
                 decoration: InputDecoration(
-                  hintText: 'mot de passe',
-                  icon: Icon(Icons.lock_outline_rounded),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(40),
+                    borderSide: BorderSide(
+                        color: Colors.blue[500] ?? Colors.blue, width: 2),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(40),
+                    borderSide: BorderSide(
+                        color: Colors.blue[700] ?? Colors.blue, width: 1),
+                  ),
+                  labelText: 'mot de passe',
+                  labelStyle: TextStyle(color: Colors.grey),
+                  prefixIcon: Icon(
+                    Icons.lock_outline_rounded,
+                    color: Colors.blue[700],
+                  ),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)),
                   suffixIcon: togglePassword(),
@@ -220,7 +234,7 @@ class _LoginState extends State<Login> {
           color: Colors.white,
           shape: RoundedRectangleBorder(
               side: BorderSide(
-                  color: Colors.blue[700] ?? Colors.blue, width: 2.0),
+                  color: Colors.blue[700] ?? Colors.blue, width: 1.5),
               borderRadius: BorderRadius.circular((90))),
           onPressed: () {
             signInWithGoogle();
@@ -279,8 +293,14 @@ class _LoginState extends State<Login> {
         });
       },
       icon: _isSecurePassword
-          ? Icon(Icons.visibility_off_outlined)
-          : Icon(Icons.visibility_outlined),
+          ? Icon(
+              Icons.visibility_off_outlined,
+              color: Colors.blue[500],
+            )
+          : Icon(
+              Icons.visibility_outlined,
+              color: Colors.blue[500],
+            ),
       color: Colors.grey,
     );
   }

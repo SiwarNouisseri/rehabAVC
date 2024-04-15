@@ -1,8 +1,13 @@
 import 'dart:io';
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/patient/MessPatient.dart';
 import 'package:first/patient/NotifPatient.dart';
+import 'package:first/patient/afficheRendez.dart';
+import 'package:first/patient/contacterspec.dart';
+import 'package:first/patient/doctor.dart';
+import 'package:first/patient/mesDemades.dart';
 import 'package:first/patient/welcomePatient.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +24,10 @@ class _HomepageState extends State<Homepage> {
   int selectedindex = 0;
   List<Widget> listWidget = <Widget>[
     WelcomePatient(),
+    MesDemandes(),
+    Contacter(),
     NotifPatient(),
-    MessPatient(),
+    AfficheRendez()
   ];
 
   @override
@@ -48,11 +55,19 @@ class _HomepageState extends State<Homepage> {
                 color: Colors.white,
               ),
               Icon(
+                Icons.person_add_alt_1_rounded,
+                color: Colors.white,
+              ),
+              Icon(
+                Icons.search_sharp,
+                color: Colors.white,
+              ),
+              Icon(
                 Icons.notifications,
                 color: Colors.white,
               ),
               Icon(
-                Icons.message,
+                Icons.date_range_outlined,
                 color: Colors.white,
               ),
             ],

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:first/orthophoniste/messageOrtho.dart';
 import 'package:first/orthophoniste/notificationOrtho.dart';
+import 'package:first/orthophoniste/patients.dart';
 import 'package:first/orthophoniste/welcome.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class _HomeOrthoState extends State<HomeOrtho> {
   List<Widget> listWidget = <Widget>[
     WelcomePage(),
     NotifOrtho(),
+    Patients(),
     MessOrtho(),
   ];
 
@@ -26,7 +28,6 @@ class _HomeOrthoState extends State<HomeOrtho> {
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: SizedBox(
-          height: 100,
           width: 200,
           child: CurvedNavigationBar(
             height: 50,
@@ -48,6 +49,10 @@ class _HomeOrthoState extends State<HomeOrtho> {
               ),
               Icon(
                 Icons.notifications,
+                color: Colors.white,
+              ),
+              Icon(
+                Icons.search,
                 color: Colors.white,
               ),
               Icon(

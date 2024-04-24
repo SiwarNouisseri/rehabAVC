@@ -2,10 +2,13 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/components/editfield.dart';
+import 'package:first/components/try.dart';
+import 'package:first/orthophoniste/envoyerEx.dart';
 import 'package:flutter/material.dart';
 
 class ModifierExercice extends StatefulWidget {
-  const ModifierExercice({super.key});
+  final String id;
+  const ModifierExercice({super.key, required this.id});
 
   @override
   State<ModifierExercice> createState() => _ModifierExerciceState();
@@ -99,6 +102,7 @@ class _ModifierExerciceState extends State<ModifierExercice> {
         title: 'Succès',
         desc: 'Modification effectuée avec succès',
       ).show();
+      setState(() {});
     } catch (error) {
       print('Erreur lors de la mise à jour : $error');
     }
@@ -129,8 +133,6 @@ class _ModifierExerciceState extends State<ModifierExercice> {
           } else {
             var desp = snapshot.data!.docs.first.get('description');
             var nom = snapshot.data!.docs.first.get('nom');
-            var id = snapshot.data!.docs.first.id;
-            print("+++++++++++++++++++++++++" + id);
 
             return ListView(children: [
               SizedBox(
@@ -248,10 +250,17 @@ class _ModifierExerciceState extends State<ModifierExercice> {
                         borderRadius: BorderRadius.circular(90),
                       ),
                       onPressed: () async {
-                        await updateExercise(
-                            context, id, description.text, nomContoller.text);
+                        await updateExercise(context, widget.id,
+                            description.text, nomContoller.text);
                         description.clear();
                         nomContoller.clear();
+
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EnvoyerOrtho()),
+                        );
+                        // setState(() {});
                       },
                       child: Text(
                         "Modifier ",

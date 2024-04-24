@@ -121,80 +121,82 @@ class _MesPatientsState extends State<MesPatients> {
                                 prenom.toLowerCase().contains(searchText));
                       }).toList();
 
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: filteredDoctors.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          var document = filteredDoctors[index];
-                          var image = document.get('image url');
-                          var nom = document.get('nom');
-                          var prenom = document.get('prenom');
+                      return Container(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: filteredDoctors.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            var document = filteredDoctors[index];
+                            var image = document.get('image url');
+                            var nom = document.get('nom');
+                            var prenom = document.get('prenom');
 
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                              left: 10,
-                              right: 10,
-                              top: 10,
-                              bottom: 10,
-                            ),
-                            child: Container(
-                              height: 70,
-                              width: 400,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(60)),
-                                color: Colors.blue[50],
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                left: 10,
+                                right: 10,
+                                top: 10,
+                                bottom: 10,
                               ),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 1,
-                                  ),
-                                  Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 3,
-                                      ),
-                                      CircleAvatar(
-                                        radius: 34.0,
-                                        backgroundImage: NetworkImage(image),
-                                      ),
-                                      SizedBox(
-                                        width: 30,
-                                      ),
-                                      Text(
-                                        nom,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.blue,
-                                          fontSize: 15,
+                              child: Container(
+                                height: 70,
+                                width: 400,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(60)),
+                                  color: Colors.blue[50],
+                                ),
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 1,
+                                    ),
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 3,
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(
-                                        prenom,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.blue,
-                                          fontSize: 15,
+                                        CircleAvatar(
+                                          radius: 34.0,
+                                          backgroundImage: NetworkImage(image),
                                         ),
-                                      ),
-                                      Spacer(),
-                                      Icon(
-                                        Icons.arrow_circle_right_outlined,
-                                        color: Colors.blue,
-                                      ),
-                                      SizedBox(width: 20),
-                                    ],
-                                  ),
-                                ],
+                                        SizedBox(
+                                          width: 30,
+                                        ),
+                                        Text(
+                                          nom,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.blue,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          prenom,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.blue,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        Icon(
+                                          Icons.arrow_circle_right_outlined,
+                                          color: Colors.blue,
+                                        ),
+                                        SizedBox(width: 20),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       );
                     },
                   );

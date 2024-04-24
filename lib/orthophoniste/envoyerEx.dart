@@ -2,6 +2,7 @@ import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:first/components/displayVideoDoc.dart';
 import 'package:first/components/exerciceContainer.dart';
 import 'package:first/components/try.dart';
+import 'package:first/orthophoniste/homertho.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -79,13 +80,32 @@ class _EnvoyerOrthoState extends State<EnvoyerOrtho> {
                   height: 20,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 40),
-                  child: Text(
-                    "Envoyer des exercices",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                        fontSize: 24),
+                  padding: const EdgeInsets.only(left: 5),
+                  child: Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeOrtho()),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                          )),
+                      Container(
+                        width: 10,
+                      ),
+                      Text(
+                        "Envoyer des exercices",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                            fontSize: 24),
+                      ),
+                    ],
                   ),
                 ),
               ]),

@@ -8,6 +8,7 @@ import 'package:first/patient/ExercicesCog.dart';
 import 'package:first/patient/ExercicesParole.dart';
 import 'package:first/patient/ExercicesPhy.dart';
 import 'package:first/patient/mesDocteurs.dart';
+import 'package:first/patient/messagerie/messageriePatient.dart';
 import 'package:first/patient/profile.dart';
 import 'package:first/patient/progression.dart';
 import 'package:flutter/cupertino.dart';
@@ -78,7 +79,7 @@ class _WelcomePatientState extends State<WelcomePatient> {
                   padding: EdgeInsets.zero,
                   children: [
                     Container(
-                        height: 180,
+                        height: 190,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
@@ -111,18 +112,37 @@ class _WelcomePatientState extends State<WelcomePatient> {
                             padding:
                                 const EdgeInsets.only(left: 10.0, right: 30.0),
                             child: ListView(children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 300.0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    scaffoldkey.currentState!.openDrawer();
-                                  },
-                                  child: Icon(
-                                    CupertinoIcons.list_dash,
-                                    color: Colors.white,
-                                    size: 28,
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(right: 273.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        scaffoldkey.currentState!.openDrawer();
+                                      },
+                                      child: Icon(
+                                        CupertinoIcons.list_dash,
+                                        color: Colors.white,
+                                        size: 28,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                MessageriePatient()),
+                                      );
+                                    },
+                                    child: Image.asset(
+                                      "images/chatting.png",
+                                      width: 40,
+                                    ),
+                                  )
+                                ],
                               ),
                               Row(children: [
                                 SizedBox(

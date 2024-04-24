@@ -166,10 +166,14 @@ class _AjouterExState extends State<AjouterEx> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue[400],
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
       body: ListView(
         children: [
           Container(
-            height: 100,
+            height: 70,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -194,25 +198,19 @@ class _AjouterExState extends State<AjouterEx> {
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10.0, right: 30.0),
-                child: Column(children: [
-                  SizedBox(
-                    height: 20,
+              padding: const EdgeInsets.only(left: 10.0, right: 30.0),
+              child: Column(children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 40),
+                  child: Text(
+                    "Ajouter des exercices",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontSize: 24),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 40),
-                    child: Text(
-                      "Ajouter des exercices",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                          fontSize: 24),
-                    ),
-                  ),
-                ]),
-              ),
+                ),
+              ]),
             ),
           ),
           SizedBox(

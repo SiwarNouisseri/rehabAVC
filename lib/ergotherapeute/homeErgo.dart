@@ -4,7 +4,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:first/ergotherapeute/messErgo.dart';
 import 'package:first/ergotherapeute/notifErgo.dart';
 import 'package:first/ergotherapeute/welcomeErgo.dart';
-import 'package:first/orthophoniste/messageOrtho.dart';
+import 'package:first/orthophoniste/messagerieOrtho.dart';
 import 'package:first/orthophoniste/notificationOrtho.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

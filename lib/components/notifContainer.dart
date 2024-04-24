@@ -185,7 +185,7 @@ class _NotifState extends State<Notif> {
                                       backgroundColor: Colors.green,
                                     ));
 
-                                    print("sucess");
+                                    print("success");
                                     setState(() {
                                       snapshot.data!.docs.removeAt(index);
                                     });

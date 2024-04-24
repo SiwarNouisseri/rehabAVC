@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/components/displayVideoDoc.dart';
@@ -22,6 +22,11 @@ class _TryState extends State<Try> {
     super.initState();
 
     exerciceref = FirebaseFirestore.instance.collection("exercices");
+  }
+
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -85,6 +90,7 @@ class _TryState extends State<Try> {
                 final nom = document.get('nom');
                 final url = document.get('urlvideo');
                 final description = document.get('description');
+                final id = document.id;
 
                 // var doc = snapshot.data!.docs[index];
                 return Padding(
@@ -146,18 +152,6 @@ class _TryState extends State<Try> {
                                 PopupMenuItem(
                                   child: Row(children: [
                                     Icon(
-                                      Icons.mode,
-                                      color: Colors.blueGrey,
-                                    ), // Icon
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 10.0),
-                                      child: Text('Modifier'),
-                                    ),
-                                  ]),
-                                ),
-                                PopupMenuItem(
-                                  child: Row(children: [
-                                    Icon(
                                       Icons.share,
                                       color: Colors.blueGrey,
                                     ), // Icon
@@ -179,6 +173,7 @@ class _TryState extends State<Try> {
                             ),
                           ]),
                           SizedBox(height: 20),
+                          //affichage de description
                           Text(
                             description,
                             style: TextStyle(
@@ -199,8 +194,9 @@ class _TryState extends State<Try> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            ModifierExercice()),
+                                            ModifierExercice(id: id)),
                                   );
+                                  // setState(() {});
                                 },
                                 child: Image.asset(
                                   "images/edit.png",
@@ -209,7 +205,21 @@ class _TryState extends State<Try> {
                               ),
                               SizedBox(width: 20),
                               GestureDetector(
-                                onTap: () => {},
+                                onTap: () async {
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.question,
+                                    animType: AnimType.bottomSlide,
+                                    title:
+                                        'Vous êtes sûr de supprimer cet exercice ',
+                                    btnOkOnPress: () async {
+                                      await FirebaseFirestore.instance
+                                          .collection('exercices')
+                                          .doc(document.id)
+                                          .delete();
+                                    },
+                                  ).show();
+                                },
                                 child: Image.asset(
                                   "images/binbin.png",
                                   width: 25,

@@ -1,4 +1,7 @@
 import 'package:animated_icon/animated_icon.dart';
+import 'package:first/patient/ConsulterProg.dart';
+import 'package:first/patient/exerciceChange.dart';
+import 'package:first/patient/filtreProg.dart';
 import 'package:flutter/material.dart';
 
 class Progression extends StatefulWidget {
@@ -18,16 +21,17 @@ class _ProgressionState extends State<Progression> {
         title: Text(
           ' Ma progression',
           style: TextStyle(
+            fontSize: 25,
             fontWeight: FontWeight.w800,
             color: Colors.white,
           ),
         ),
-        titleSpacing: 70,
+        titleSpacing: 50,
       ),
       body: ListView(
         children: [
           Container(
-            height: 80,
+            height: 60,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -52,23 +56,8 @@ class _ProgressionState extends State<Progression> {
               ],
             ),
           ),
-          SizedBox(height: 150),
-          Padding(
-            padding: const EdgeInsets.only(left: 37.0, right: 37.0),
-            child: Text(
-                "Merci de commencer vos exercices afin de suivre l'évolution de votre progression",
-                style: TextStyle(
-                    color: Colors.indigo,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16)),
-          ),
-          SizedBox(height: 100),
-          Padding(
-            padding: const EdgeInsets.only(left: 120.0, right: 120.0),
-            child: Image.asset(
-              'images/reduce-time.png',
-            ),
-          )
+          SizedBox(height: 30),
+          Container(height: 700, width: 400, child: FilterProg())
         ],
       ),
     );

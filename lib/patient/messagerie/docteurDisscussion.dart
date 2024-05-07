@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first/orthophoniste/lastMess.dart';
+import 'package:first/orthophoniste/messagerie/lastMess.dart';
 import 'package:first/orthophoniste/messOrtho.dart';
 import 'package:flutter/material.dart';
 

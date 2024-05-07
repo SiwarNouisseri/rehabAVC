@@ -3,7 +3,10 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/components/displayVideoDoc.dart';
+import 'package:first/components/envoiMespatient.dart';
+import 'package:first/orthophoniste/mesPatients.dart';
 import 'package:first/orthophoniste/modifierex.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Try extends StatefulWidget {
@@ -13,9 +16,29 @@ class Try extends StatefulWidget {
   State<Try> createState() => _TryState();
 }
 
+class Exercice {
+  final String id;
+  final String name;
+  final String description;
+  final String type;
+  final String etat;
+  final String url;
+
+  Exercice({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.type,
+    required this.etat,
+    required this.url,
+  });
+}
+
 class _TryState extends State<Try> {
   late CollectionReference<Map<String, dynamic>> exerciceref;
   final TextEditingController searchController = TextEditingController();
+  final Map<String, bool> selectedExercises = {};
+  static List<String> selectedExercise = [];
 
   @override
   void initState() {
@@ -24,6 +47,7 @@ class _TryState extends State<Try> {
     exerciceref = FirebaseFirestore.instance.collection("exercices");
   }
 
+  @override
   void dispose() {
     searchController.dispose();
     super.dispose();
@@ -91,8 +115,11 @@ class _TryState extends State<Try> {
                 final url = document.get('urlvideo');
                 final description = document.get('description');
                 final id = document.id;
+                final type = document.get('type');
 
-                // var doc = snapshot.data!.docs[index];
+                bool isSelected =
+                    selectedExercises[id] ?? false; // Check for selection
+
                 return Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Card(
@@ -102,6 +129,17 @@ class _TryState extends State<Try> {
                       child: Column(
                         children: [
                           Row(children: [
+                            Checkbox(
+                              activeColor: Colors.green,
+                              value: isSelected, // Set checkbox value
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedExercises[id] = value!;
+                                  print("++++++++++++++++$id");
+                                  selectedExercise.add(id); // Update selection
+                                });
+                              },
+                            ),
                             Text(
                               "Exercice",
                               style: TextStyle(
@@ -237,6 +275,53 @@ class _TryState extends State<Try> {
           }
         },
       ),
+      floatingActionButton: _buildNavigationButton(context),
     );
+  }
+
+  Widget _buildNavigationButton(BuildContext context) {
+    bool isAnyChecked = selectedExercises.values.any((isChecked) => isChecked);
+    if (isAnyChecked) {
+      return FloatingActionButton(
+        backgroundColor: Colors.blue,
+        onPressed: () {
+          showCupertinoModalPopup(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext builder) {
+              return CupertinoPopupSurface(
+                child: Container(
+                    color: CupertinoColors.white,
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    height: 600,
+                    child: Container(
+                      width: 700,
+                      height: 600,
+                      child: Column(
+                        children: [
+                          Container(
+                              width: 400,
+                              height: 600,
+                              child: envoiMesPatient(
+                                selectedExercise: selectedExercise,
+                              )),
+                        ],
+                      ),
+                    )),
+              );
+            },
+          );
+          print("++++++++++++++helooo+++++++++++++++++++++++++");
+        },
+        child: Icon(
+          Icons.share,
+          color: Colors.white,
+        ),
+      );
+    } else {
+      // Si aucun élément n'est coché, ne pas afficher de bouton
+      return Container();
+    }
   }
 }

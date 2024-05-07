@@ -169,6 +169,9 @@ class _LoginState extends State<Login> {
             ],
           ),
         ),
+        SizedBox(
+          height: 30,
+        ),
         CustomButton(
           title: 'Connexion',
           onPressed: () async {
@@ -228,27 +231,7 @@ class _LoginState extends State<Login> {
             }
           },
         ),
-        MaterialButton(
-          minWidth: 60,
-          height: 40,
-          color: Colors.white,
-          shape: RoundedRectangleBorder(
-              side: BorderSide(
-                  color: Colors.blue[700] ?? Colors.blue, width: 1.5),
-              borderRadius: BorderRadius.circular((90))),
-          onPressed: () {
-            signInWithGoogle();
-          },
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Text("Continuer avec Google",
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: Colors.blue,
-                )),
-            Image.asset("images/google.png", width: 25)
-          ]),
-        ),
-        Container(height: 10),
+        Container(height: 20),
         InkWell(
           onTap: () {
             Navigator.of(context).pushReplacementNamed("actor");

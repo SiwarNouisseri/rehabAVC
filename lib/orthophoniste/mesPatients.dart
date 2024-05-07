@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first/orthophoniste/progressionPa.dart';
+import 'package:first/patient/progression.dart';
 import 'package:flutter/material.dart';
 
 class MesPatients extends StatefulWidget {
@@ -131,6 +133,7 @@ class _MesPatientsState extends State<MesPatients> {
                             var image = document.get('image url');
                             var nom = document.get('nom');
                             var prenom = document.get('prenom');
+                            var idPat = document.get('id');
 
                             return Padding(
                               padding: const EdgeInsets.only(
@@ -184,9 +187,23 @@ class _MesPatientsState extends State<MesPatients> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Icon(
-                                          Icons.arrow_circle_right_outlined,
-                                          color: Colors.blue,
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProgressionPA(
+                                                  idpat: idPat,
+                                                  nom: prenom,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: Icon(
+                                            Icons.arrow_circle_right_outlined,
+                                            color: Colors.blue,
+                                          ),
                                         ),
                                         SizedBox(width: 20),
                                       ],

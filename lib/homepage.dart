@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first/patient/MessPatient.dart';
+
 import 'package:first/patient/NotifPatient.dart';
 import 'package:first/patient/afficheRendez.dart';
 import 'package:first/patient/contacterspec.dart';
@@ -62,9 +62,11 @@ class _HomepageState extends State<Homepage> {
                 Icons.search_sharp,
                 color: Colors.white,
               ),
-              Icon(
-                Icons.notifications,
-                color: Colors.white,
+              Badge(
+                child: Icon(
+                  Icons.notifications,
+                  color: Colors.white,
+                ),
               ),
               Icon(
                 Icons.date_range_outlined,

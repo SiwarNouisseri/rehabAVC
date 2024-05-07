@@ -66,7 +66,7 @@ class _EditExState extends State<EditEx> {
               child: Column(
               children: [
                 SizedBox(
-                  height: 200,
+                  height: 30,
                 ),
                 Text(
                     "Votre vidéo est en train de charger \n attendez un peu s'il vous plaît.",
@@ -75,7 +75,7 @@ class _EditExState extends State<EditEx> {
                         fontWeight: FontWeight.w500,
                         fontSize: 17)),
                 SizedBox(
-                  height: 100,
+                  height: 20,
                 ),
                 CircularProgressIndicator(color: Colors.blue),
               ],

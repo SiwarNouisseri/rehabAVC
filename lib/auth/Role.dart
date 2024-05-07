@@ -27,15 +27,16 @@ class RoleChecker extends StatelessWidget {
             return Text('Document does not exist on the database');
           } else {
             var role = snapshot.data!.docs.first.get('role');
-            if (role == "Orthophoniste") {
+            if (role == "Orthophoniste" || role == "Ergothérapeute") {
               return HomeOrtho();
             } else if (role == "patient") {
               return Homepage();
             } else if (role == "admin") {
               return HomeAdmin();
-            } else if (role == "Ergothérapeute") {
+            } /*else if (role == "Ergothérapeute") {
               return HomeErgo();
-            } else {
+            }*/
+            else {
               return Text('Unknown role');
             }
           }

@@ -1,4 +1,5 @@
 import 'package:first/patient/drawer.dart';
+import 'package:first/patient/filtre.dart';
 import 'package:first/patient/notifContPatient.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +83,7 @@ class _NotifPatientState extends State<NotifPatient> {
               SizedBox(height: 60),
               Container(
                 height: 800,
-                child: NotifyMe(),
+                child: FilterPage(),
               ),
             ],
           ),

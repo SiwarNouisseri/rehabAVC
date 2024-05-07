@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first/orthophoniste/disscussionOrtho.dart';
+import 'package:first/orthophoniste/messagerie/disscussionOrtho.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:grouped_list/grouped_list.dart';

@@ -79,7 +79,7 @@ class _WelcomePatientState extends State<WelcomePatient> {
                   padding: EdgeInsets.zero,
                   children: [
                     Container(
-                        height: 190,
+                        height: 210,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
@@ -330,7 +330,7 @@ class _WelcomePatientState extends State<WelcomePatient> {
                                       height: 70,
                                     ),
                                     Text(
-                                      "Cognitive",
+                                      "Cognitif",
                                       style: TextStyle(
                                         fontWeight: FontWeight.w300,
                                         color: Colors.blueGrey[700],

@@ -1,3 +1,4 @@
+import 'package:first/components/exerciceEffectue.dart';
 import 'package:flutter/material.dart';
 
 class ExercicesParole extends StatefulWidget {
@@ -26,7 +27,7 @@ class _ExercicesParoleState extends State<ExercicesParole> {
       body: ListView(
         children: [
           Container(
-            height: 80,
+            height: 50,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -51,23 +52,13 @@ class _ExercicesParoleState extends State<ExercicesParole> {
               ],
             ),
           ),
-          SizedBox(height: 150),
-          Padding(
-            padding: const EdgeInsets.only(left: 37.0, right: 37.0),
-            child: Text(
-                "Il n’y a pas d’exercices à montrer, Veuillez attendre que votre médecin vous envoie",
-                style: TextStyle(
-                    color: Colors.indigo,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 15)),
-          ),
-          SizedBox(height: 40),
-          Padding(
-            padding: const EdgeInsets.only(left: 70.0, right: 70.0),
-            child: Image.asset(
-              'images/welcome.png',
-            ),
-          )
+          SizedBox(height: 50),
+          Container(
+              width: 50,
+              height: 600,
+              child: ExerciceEffectuer(
+                type: 'Parole',
+              ))
         ],
       ),
     );

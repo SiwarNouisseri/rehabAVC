@@ -52,7 +52,7 @@ class _AideState extends State<Aide> {
                     Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Text(
-                          "Si vous avez une panne ou une problème technique merci de la déclarer içi :  ",
+                          "Si vous avez une panne ou une problème technique merci de la déclarer ici :  ",
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
                               color: Colors.blueGrey[500],

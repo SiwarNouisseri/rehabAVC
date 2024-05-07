@@ -1,3 +1,5 @@
+import 'package:first/components/effectuerPhy.dart';
+import 'package:first/components/exerciceEffectue.dart';
 import 'package:flutter/material.dart';
 
 class ExercicePhy extends StatefulWidget {
@@ -15,7 +17,7 @@ class _ExercicePhyState extends State<ExercicePhy> {
         iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: Colors.blue[400],
         title: Text(
-          ' Exercices Physique ',
+          ' Exercices physique ',
           style: TextStyle(
             fontWeight: FontWeight.w800,
             color: Colors.white,
@@ -26,7 +28,7 @@ class _ExercicePhyState extends State<ExercicePhy> {
       body: ListView(
         children: [
           Container(
-            height: 80,
+            height: 50,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -51,23 +53,13 @@ class _ExercicePhyState extends State<ExercicePhy> {
               ],
             ),
           ),
-          SizedBox(height: 150),
-          Padding(
-            padding: const EdgeInsets.only(left: 37.0, right: 37.0),
-            child: Text(
-                "Il n’y a pas d’exercices à montrer, Veuillez attendre que votre médecin vous envoie",
-                style: TextStyle(
-                    color: Colors.indigo,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 15)),
-          ),
-          SizedBox(height: 40),
-          Padding(
-            padding: const EdgeInsets.only(left: 70.0, right: 70.0),
-            child: Image.asset(
-              'images/welcome.png',
-            ),
-          )
+          SizedBox(height: 50),
+          Container(
+              width: 50,
+              height: 600,
+              child: ExerciceEffectuer(
+                type: 'Physique',
+              ))
         ],
       ),
     );

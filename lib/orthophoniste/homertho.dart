@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:first/orthophoniste/messagerieOrtho.dart';
+import 'package:first/orthophoniste/messagerie/messagerieOrtho.dart';
 import 'package:first/orthophoniste/notificationOrtho.dart';
 import 'package:first/orthophoniste/patients.dart';
 import 'package:first/orthophoniste/welcome.dart';

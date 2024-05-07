@@ -440,7 +440,7 @@ class _AjouterExState extends State<AjouterEx> {
                     // Ajouter les détails de la vidéo après le téléchargement
                     addVideoDetails(nom.text, description.text, selectedType);
 
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => AjouterEx()),
                     );

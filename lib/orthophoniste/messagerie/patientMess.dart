@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/orthophoniste/messOrtho.dart';
-import 'package:first/orthophoniste/messagerieOrtho.dart';
+import 'package:first/orthophoniste/messagerie/messagerieOrtho.dart';
 import 'package:flutter/material.dart';
 
 class PatientMess extends StatefulWidget {

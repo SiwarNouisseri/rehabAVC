@@ -80,9 +80,9 @@ class _NotifPatientState extends State<NotifPatient> {
                   ),
                 ),
               ),
-              SizedBox(height: 60),
+              SizedBox(height: 20),
               Container(
-                height: 800,
+                height: 700,
                 child: FilterPage(),
               ),
             ],

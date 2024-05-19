@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:first/orthophoniste/Rendez-vousortho.dart';
 import 'package:first/orthophoniste/messagerie/messagerieOrtho.dart';
 import 'package:first/orthophoniste/notificationOrtho.dart';
 import 'package:first/orthophoniste/patients.dart';
@@ -22,6 +23,7 @@ class _HomeOrthoState extends State<HomeOrtho> {
     NotifOrtho(),
     Patients(),
     MessOrtho(),
+    RendezOrtho()
   ];
 
   @override
@@ -57,6 +59,10 @@ class _HomeOrthoState extends State<HomeOrtho> {
               ),
               Icon(
                 Icons.message,
+                color: Colors.white,
+              ),
+              Icon(
+                Icons.date_range_outlined,
                 color: Colors.white,
               ),
             ],

@@ -11,6 +11,21 @@ class DoctorWidget extends StatefulWidget {
 }
 
 class _DoctorWidgetState extends State<DoctorWidget> {
+  void updateDocumentField(String docId) {
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection('users').doc(docId);
+
+    // Update the specific field using the update method
+    documentReference.update({
+      'etat': 'désactivé',
+    }).then((value) {
+      print('updated document successd');
+    }).catchError((error) {
+      print('Failed to update document field: $error');
+    });
+  }
+
+  /////////////////////fonction de suppression de compte//////////////////
   void deleteUserData(String id) async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -50,6 +65,7 @@ class _DoctorWidgetState extends State<DoctorWidget> {
       }
     }
   }
+  /////////////////////fonction de suppression de compte//////////////////
 
   TextEditingController searchController = TextEditingController();
 
@@ -93,7 +109,8 @@ class _DoctorWidgetState extends State<DoctorWidget> {
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('users')
-              .orderBy('nom') // Tri par nom
+              .orderBy('nom')
+              .where('etat', isEqualTo: 'activé') // Tri par nom
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
@@ -121,6 +138,7 @@ class _DoctorWidgetState extends State<DoctorWidget> {
                   var document = filteredDoctors[index];
                   var image = document.get('image url');
                   var nom = document.get('nom');
+                  var doc = document.id;
                   var prenom = document.get('prenom');
                   var mail = document.get('email');
                   var temps = document.get('Date de creation');
@@ -195,14 +213,6 @@ class _DoctorWidgetState extends State<DoctorWidget> {
                                               fontSize: 12,
                                             ),
                                           ),
-                                          Text(
-                                            "Mot de passe :" + " " + mdp,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.blueGrey[700],
-                                              fontSize: 12,
-                                            ),
-                                          ),
                                         ],
                                       ),
                                     ),
@@ -216,7 +226,8 @@ class _DoctorWidgetState extends State<DoctorWidget> {
                                             height: 20,
                                             width: 100,
                                             decoration: BoxDecoration(
-                                              color: Colors.amber,
+                                              color: Color.fromARGB(
+                                                  255, 98, 215, 108),
                                               borderRadius:
                                                   const BorderRadius.all(
                                                       Radius.circular(2)),
@@ -227,7 +238,7 @@ class _DoctorWidgetState extends State<DoctorWidget> {
                                               child: Text(
                                                 role,
                                                 style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
+                                                  fontWeight: FontWeight.w800,
                                                   color: Colors.white,
                                                   fontSize: 8.5,
                                                 ),
@@ -238,7 +249,20 @@ class _DoctorWidgetState extends State<DoctorWidget> {
                                             height: 40,
                                           ),
                                           GestureDetector(
-                                            //   onTap: () => deleteUserData(idDoc),
+                                            onTap: () {
+                                              AwesomeDialog(
+                                                context: context,
+                                                dialogType: DialogType.error,
+                                                animType: AnimType.rightSlide,
+                                                title: 'Suppression',
+                                                btnCancelOnPress: () {},
+                                                btnOkOnPress: () {
+                                                  updateDocumentField(doc);
+                                                },
+                                                desc:
+                                                    'Êtes-vous sûr de vouloir supprimer ce compte ?',
+                                              ).show();
+                                            },
                                             child: Column(
                                               children: [
                                                 Container(

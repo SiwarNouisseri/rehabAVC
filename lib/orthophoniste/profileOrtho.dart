@@ -204,7 +204,7 @@ class _ProfileOrthoState extends State<ProfileOrtho> {
                 var prenom = snapshot.data!.docs.first.get('prenom');
                 var mdp = snapshot.data!.docs.first.get('mot de passe ');
                 var nom = snapshot.data!.docs.first.get('nom');
-                var temps = snapshot.data!.docs.first.get('temps');
+                var addresse = snapshot.data!.docs.first.get('addresse');
                 var exp = snapshot.data!.docs.first.get('exp');
                 var email = snapshot.data!.docs.first.get('email');
                 return ListView(padding: EdgeInsets.zero, children: [
@@ -399,9 +399,9 @@ class _ProfileOrthoState extends State<ProfileOrtho> {
                     ),
                   ),
                   EditMe(
-                    icon: Icons.access_time,
-                    title: temps ?? '',
-                    tap: () => editField('temps', 'Disponibilité', context),
+                    icon: Icons.location_on_outlined,
+                    title: addresse ?? '',
+                    tap: () => editField('addresse', 'Addresse', context),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
@@ -425,7 +425,7 @@ class _ProfileOrthoState extends State<ProfileOrtho> {
                             Icon(Icons.bar_chart_rounded, color: Colors.blue),
                             SizedBox(width: 40),
                             Text(
-                              'exp' ?? '',
+                              '$exp' ?? '',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontWeight: FontWeight.w300,

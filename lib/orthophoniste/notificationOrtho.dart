@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/auth/currentUser.dart';
 import 'package:first/components/notifContainer.dart';
 import 'package:first/orthophoniste/drawerOrth.dart';
+import 'package:first/orthophoniste/filtreNotifOrtho.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -85,7 +86,7 @@ class _NotifOrthoState extends State<NotifOrtho> {
                 ),
               ),
               SizedBox(height: 60),
-              Container(height: 800, child: Notif()),
+              Container(height: 800, child: FiltreOrtho()),
             ],
           ),
         ));

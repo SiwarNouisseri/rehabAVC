@@ -53,7 +53,7 @@ class _NotifExState extends State<NotifEx> {
             return Column(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height,
+                  height: 400,
                   child: ListView.builder(
                     shrinkWrap: true,
                     physics: ScrollPhysics(),

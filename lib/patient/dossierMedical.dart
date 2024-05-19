@@ -460,7 +460,7 @@ class _DossierState extends State<Dossier> {
                                       'age': _selectedAge,
                                       'date Avc': date,
                                       'type Avc': selectedType,
-                                      'reduction_online': getCheckedText(),
+                                      'rééduction enligne': getCheckedText(),
                                       'url pdf': "pdfs/" + name,
                                       'id patient': FirebaseAuth
                                           .instance.currentUser!.uid,

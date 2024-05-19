@@ -1,17 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first/patient/voirRendezPatient.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 class MoreABoutDoc extends StatefulWidget {
+  final String addresse;
+  final String idDoc;
   final String bio;
   final int years;
   final String nom;
   final String prenom;
   final String role;
   final String image;
-  final String temps;
   final void Function()? onPressed;
   final void Function()? onPress;
   const MoreABoutDoc(
@@ -21,10 +23,11 @@ class MoreABoutDoc extends StatefulWidget {
       required this.prenom,
       required this.role,
       required this.image,
-      required this.temps,
       required this.years,
       this.onPressed,
-      this.onPress});
+      this.onPress,
+      required this.addresse,
+      required this.idDoc});
 
   @override
   State<MoreABoutDoc> createState() => _MoreABoutDocState();
@@ -91,7 +94,7 @@ class _MoreABoutDocState extends State<MoreABoutDoc> {
                             color: Colors.amber[400]),
                       ),
                       const SizedBox(height: 20),
-                      Padding(
+                      /*Padding(
                         padding: EdgeInsets.only(right: 22),
                         child: Row(
                           children: [
@@ -110,33 +113,41 @@ class _MoreABoutDocState extends State<MoreABoutDoc> {
                           ],
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(right: 26.0),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.group,
-                              color: Colors.indigo,
-                            ),
-                            SizedBox(width: 10),
-                          ],
-                        ),
-                      ),
+                      */
                       Row(
                         children: [
                           Icon(
-                            Icons.bar_chart_rounded,
+                            Icons.location_on_outlined,
                             color: Colors.indigo,
                           ),
-                          SizedBox(width: 10),
+                          SizedBox(width: 2),
                           Text(
-                            "+" + widget.years.toString() + "ans Expérience",
+                            widget.addresse,
                             style: TextStyle(
                                 fontWeight: FontWeight.w400,
-                                fontSize: 14,
+                                fontSize: 13,
                                 color: Colors.indigo),
                           ),
                         ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 35.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.bar_chart_rounded,
+                              color: Colors.indigo,
+                            ),
+                            SizedBox(width: 2),
+                            Text(
+                              "+ " + widget.years.toString() + "ans Expérience",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Colors.indigo),
+                            ),
+                          ],
+                        ),
                       ),
                     ]),
                   ),
@@ -159,32 +170,40 @@ class _MoreABoutDocState extends State<MoreABoutDoc> {
                 bottomRight: Radius.circular(20),
               ),
             ),
-            child: Row(children: [
-              SizedBox(
-                width: 120,
+            child: Padding(
+              padding: EdgeInsets.only(left: 100, right: 60),
+              child: Container(
+                decoration: BoxDecoration(
+                    //color: Colors.blue[50],
+                    borderRadius: const BorderRadius.all(Radius.circular(80))),
+                child: Row(
+                  children: [
+                    Text(
+                      "    Avis des patients",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 14,
+                          color: Colors.blue[900]),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios_sharp,
+                      size: 15,
+                      color: Colors.blue[900],
+                    ),
+                  ],
+                ),
               ),
-              Icon(
-                CupertinoIcons.phone_circle_fill,
-                color: Colors.red,
-                size: 38,
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              Icon(
-                Iconsax.message5,
-                color: Colors.indigoAccent,
-                size: 38,
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              Icon(
-                CupertinoIcons.videocam_circle_fill,
-                color: const Color.fromARGB(255, 35, 197, 40),
-                size: 38,
-              ),
-            ]),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(
@@ -194,7 +213,7 @@ class _MoreABoutDocState extends State<MoreABoutDoc> {
               style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 14,
-                  color: Colors.grey),
+                  color: Colors.blue[800]),
             ),
           ),
           Padding(
@@ -245,6 +264,27 @@ class _MoreABoutDocState extends State<MoreABoutDoc> {
                     onPressed: widget.onPress),
               ]),
             ],
+          ),
+          SizedBox(
+            height: 50,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text("Les rendez-vous disponibles :",
+                style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 17,
+                    color: Colors.blue[800])),
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          Container(
+            height: 400,
+            width: 500,
+            child: VoirRendazPatient(
+              idDoc: widget.idDoc,
+            ),
           ),
         ]));
   }

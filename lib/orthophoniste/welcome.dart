@@ -2,9 +2,11 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/orthophoniste/calendrier.dart';
+import 'package:first/orthophoniste/calendrierFirestPage.dart';
 import 'package:first/orthophoniste/drawerOrth.dart';
 import 'package:first/orthophoniste/AjouterEx.dart';
 import 'package:first/orthophoniste/envoyerEx.dart';
+import 'package:first/orthophoniste/map.dart';
 import 'package:first/orthophoniste/mesPatients.dart';
 import 'package:first/orthophoniste/profileOrtho.dart';
 import 'package:flutter/cupertino.dart';
@@ -274,7 +276,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 40, left: 30, right: 30),
                   child: Text(
-                    "fixer ma calendrier :",
+                    "Fixer ma calendrier :",
                     style: TextStyle(
                         fontSize: 21,
                         fontWeight: FontWeight.w700,
@@ -297,16 +299,17 @@ class _WelcomePageState extends State<WelcomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CalendrierOrtho()),
+                                  builder: (context) => CalendrierFirst()),
                             );
                           },
                           child: Container(
                               height: 100,
                               width: 50,
-                              child: Card(
-                                  child: Image.asset("images/timetable.png"))),
+                              child: Image.asset(
+                                  "images/medical-appointment.png")),
                         ),
                       ),
+                      GestureDetector(child: Icon(Icons.map_outlined))
                     ],
                   ),
                 ),

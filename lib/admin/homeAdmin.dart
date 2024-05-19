@@ -26,7 +26,7 @@ class _HomeAdminState extends State<HomeAdmin> {
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: SizedBox(
-          height: 100,
+          height: 50,
           width: 200,
           child: CurvedNavigationBar(
             height: 50,

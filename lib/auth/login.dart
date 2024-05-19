@@ -73,9 +73,10 @@ class _LoginState extends State<Login> {
               Text(
                 "Bienvenue",
                 style: TextStyle(
-                    fontSize: 35,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.blue[700]),
+                  fontSize: 40,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.blue[600],
+                ),
               ),
               Container(height: 60),
               CustomTextForm(
@@ -256,7 +257,7 @@ class _LoginState extends State<Login> {
                     "Inscrivez-vous ici",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: Colors.blue[400],
+                      color: Colors.blue[600],
                     ),
                   ),
                 ),

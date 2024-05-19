@@ -18,8 +18,9 @@ class RoleChecker extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
-              child:
-                  CircularProgressIndicator()); // Show loading indicator while fetching data
+              child: CircularProgressIndicator(
+            color: Colors.blue,
+          )); // Show loading indicator while fetching data
         } else {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');

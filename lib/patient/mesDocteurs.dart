@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first/patient/moreaboutDoctor.dart';
 import 'package:first/patient/rendezVous.dart';
 import 'package:flutter/material.dart';
 
@@ -89,7 +90,17 @@ class _MesDocteursState extends State<MesDocteurs> {
                                 var prenom =
                                     snapshot.data!.docs.first.get('prenom');
                                 var nom = snapshot.data!.docs.first.get('nom');
+                                var role =
+                                    snapshot.data!.docs.first.get('role');
 
+                                var years =
+                                    snapshot.data!.docs.first.get('exp');
+                                var bio = snapshot.data!.docs.first.get('bio');
+                                var id = snapshot.data!.docs.first.get('id');
+                                var url =
+                                    snapshot.data!.docs.first.get('image url');
+                                var addresse =
+                                    snapshot.data!.docs.first.get('addresse');
                                 var image =
                                     snapshot.data!.docs.first.get('image url');
                                 return Padding(
@@ -102,11 +113,16 @@ class _MesDocteursState extends State<MesDocteurs> {
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (context) => Rendez(
+                                                  builder: (context) =>
+                                                      MoreABoutDoc(
                                                         nom: nom,
                                                         image: image,
                                                         prenom: prenom,
                                                         idDoc: idDoc,
+                                                        bio: bio,
+                                                        role: role,
+                                                        years: years,
+                                                        addresse: addresse,
                                                       )));
                                         },
                                         child: CircleAvatar(

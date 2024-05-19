@@ -52,7 +52,7 @@ class _NotifyMeState extends State<NotifyMe> {
             return Column(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height,
+                  height: 400,
                   child: ListView.builder(
                     shrinkWrap: true,
                     physics: ScrollPhysics(),
@@ -65,11 +65,11 @@ class _NotifyMeState extends State<NotifyMe> {
                       var temps = document.get('acceptée le');
 
                       DateTime date = temps.toDate();
-                      int jour = date.day; // Jour du mois (1-31)
-                      int mois = date.month; // Mois (1-12)
-                      int annee = date.year; // Année
-                      int heure = date.hour; // Heure (0-23)
-                      int minute = date.minute; // Minute (0-59)
+                      int jour = date.day;
+                      int mois = date.month;
+                      int annee = date.year;
+                      int heure = date.hour;
+                      int minute = date.minute;
                       return StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance
                             .collection('users')

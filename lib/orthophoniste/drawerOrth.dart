@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first/components/My_listTile.dart';
 import 'package:first/orthophoniste/AideOrtho.dart';
+import 'package:first/orthophoniste/feedback.dart';
 import 'package:first/orthophoniste/homertho.dart';
 import 'package:first/orthophoniste/profileOrtho.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class MyDrawerOrtho extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => HomeOrtho()));
             },
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 10),
           MyListTile(
             icon: Icons.person_4_rounded,
             title: "Compte",
@@ -39,7 +40,16 @@ class MyDrawerOrtho extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => ProfileOrtho()));
             },
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 10),
+          MyListTile(
+            icon: Icons.health_and_safety_outlined,
+            title: "Avis patients",
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => AvisDoc()));
+            },
+          ),
+          SizedBox(height: 10),
           MyListTile(
             icon: Icons.help_outline_rounded,
             title: "Réclamation",
@@ -48,7 +58,7 @@ class MyDrawerOrtho extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => AideOrtho()));
             },
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 10),
           MyListTile(
             icon: Icons.login_rounded,
             title: "Déconnexion",

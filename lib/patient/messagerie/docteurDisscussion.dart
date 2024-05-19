@@ -12,6 +12,26 @@ class DocDiss extends StatefulWidget {
 }
 
 class _DocDissState extends State<DocDiss> {
+  Future<void> updateMessages(String conversationId) async {
+    try {
+      var querySnapshot = await FirebaseFirestore.instance
+          .collection('message')
+          .where('id conver ', isEqualTo: conversationId)
+          .where("recepteur", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      for (var document in querySnapshot.docs) {
+        await document.reference.update({
+          'statut': 'vu',
+        });
+      }
+
+      print('Champs mis à jour avec succès.');
+    } catch (e) {
+      print('Erreur lors de la mise à jour des champs : $e');
+    }
+  }
+
   bool isYouTheSender(String senderId) {
     String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
     return currentUserId != null && currentUserId == senderId;
@@ -96,6 +116,7 @@ class _DocDissState extends State<DocDiss> {
                                               idPatient: idpat),
                                         ),
                                       );
+                                      updateMessages(idConver);
                                     },
                                     child: Row(
                                       children: [

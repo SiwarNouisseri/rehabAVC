@@ -1,3 +1,4 @@
+import 'package:first/patient/NotifMess.dart';
 import 'package:first/patient/notifContPatient.dart';
 import 'package:first/patient/notifExer.dart';
 import 'package:flutter/material.dart';
@@ -122,14 +123,7 @@ class _FilterPageState extends State<FilterPage> {
           SizedBox(height: 20), // Espace entre les chips et le contenu filtré
           Visibility(visible: _isPhysicalSelected, child: NotifEx()),
           Visibility(visible: _isCognitiveSelected, child: NotifyMe()),
-          Visibility(
-            visible: _isOtherSelected,
-            child: Container(
-              padding: EdgeInsets.all(16),
-              color: Colors.yellow,
-              child: Text('Contenu pour les autres exercices'),
-            ),
-          ),
+          Visibility(visible: _isOtherSelected, child: NotifyMess()),
           // Ajoutez d'autres widgets Visibility pour d'autres filtres si nécessaire
         ],
       ),

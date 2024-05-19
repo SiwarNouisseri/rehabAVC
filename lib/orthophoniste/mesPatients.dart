@@ -65,26 +65,23 @@ class _MesPatientsState extends State<MesPatients> {
               print('Document does not exist on the database');
               return Container(
                 width: 370,
-                height: 70,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  color: Colors.amber,
-                ),
-                child: Row(
+                height: 700,
+                child: Column(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Image.asset(
-                        "images/time-left.png",
-                        width: 40,
-                      ),
-                    ),
-                    SizedBox(width: 20),
+                    SizedBox(height: 100),
                     Text(
                       "Attendez jusqu'à obtenir des patients ",
                       style: TextStyle(
-                        color: Colors.teal,
-                        fontWeight: FontWeight.w500,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 17),
+                    ),
+                    SizedBox(height: 50),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Image.asset(
+                        "images/sand-clock.png",
+                        width: 100,
                       ),
                     ),
                   ],

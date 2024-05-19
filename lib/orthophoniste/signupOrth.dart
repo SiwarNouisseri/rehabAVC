@@ -20,7 +20,8 @@ class _SignupState extends State<SignupOrtho> {
   TextEditingController surname = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  TextEditingController tel = TextEditingController();
+  TextEditingController localisation = TextEditingController();
+
   TextEditingController Confirmpassword = TextEditingController();
   var selectedSpec = "Orthophoniste";
 
@@ -159,6 +160,16 @@ class _SignupState extends State<SignupOrtho> {
                     ),
                   ),
                   Container(height: 20),
+                  CustomTextForm(
+                      validator: (val) {
+                        if (val == "") {
+                          return " champs vide ";
+                        }
+                      },
+                      hinttext: 'localisation',
+                      mycontroller: localisation,
+                      icon: Icon(Icons.location_on_outlined)),
+                  Container(height: 20),
 
                   //input password
                   CustomTextForm(
@@ -263,6 +274,7 @@ class _SignupState extends State<SignupOrtho> {
                           String time,
                           int exp,
                           String mdp,
+                          String adresse,
                           String url) async {
                         await FirebaseFirestore.instance
                             .collection('users')
@@ -277,7 +289,9 @@ class _SignupState extends State<SignupOrtho> {
                           'mot de passe ': mdp,
                           'Date de creation': DateTime.now(),
                           'id': FirebaseAuth.instance.currentUser?.uid,
-                          'image url': url
+                          'image url': url,
+                          'etat': " activé",
+                          "addresse": adresse
                         });
 
                         // Set the display name for the user
@@ -296,7 +310,8 @@ class _SignupState extends State<SignupOrtho> {
                           temps.text.trim(),
                           int.parse(exp.text.trim()),
                           password.text.trim(),
-                          "none");
+                          "none",
+                          localisation.text);
                     } on FirebaseAuthException catch (e) {
                       if (e.code == 'weak-password') {
                         print('The password provided is too weak.');

@@ -39,7 +39,8 @@ class _MessagerieState extends State<Messagerie> {
         'Date': DateTime.now(),
         'heure': timeNow,
         'envoyeur': FirebaseAuth.instance.currentUser!.uid,
-        'recepteur': widget.idPatient
+        'recepteur': widget.idPatient,
+        'statut': 'non vu'
       });
     } catch (e) {
       print('Error adding conversation details: $e');
@@ -120,8 +121,7 @@ class _MessagerieState extends State<Messagerie> {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment
-                  .spaceBetween, // Espacement entre les éléments
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: Container(

@@ -43,13 +43,13 @@ class _ReclamationState extends State<Reclamation> {
               width: 80,
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 1.0),
+              padding: const EdgeInsets.only(right: 8.0),
               child: Text(
                 "Consulter les réclamations",
                 style: TextStyle(
                     fontWeight: FontWeight.w800,
                     color: Colors.white,
-                    fontSize: 19.5),
+                    fontSize: 21),
               ),
             ),
           ])),

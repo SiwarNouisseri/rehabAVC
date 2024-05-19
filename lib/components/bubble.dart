@@ -8,6 +8,7 @@ import 'package:chat_bubbles/bubbles/bubble_normal.dart';
 
 class CustomMessageBubble extends StatelessWidget {
   final String text;
+  final String status;
   final bool isSender;
   final String time;
   final String docid;
@@ -18,10 +19,20 @@ class CustomMessageBubble extends StatelessWidget {
     required this.isSender,
     required this.time,
     required this.docid,
+    required this.status,
   }) : super(key: key);
+
+  bool getStatusBool(String status) {
+    if (status == 'vu') {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    bool isSeen = getStatusBool(status);
     return GestureDetector(
       onLongPress: () {
         AwesomeDialog(
@@ -64,22 +75,25 @@ class CustomMessageBubble extends StatelessWidget {
                 SizedBox(height: 4),
                 Container(
                   width: 60,
-                  child: Row(
-                    children: [
-                      Text(
-                        time,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: isSender ? Colors.grey : Colors.white70,
-                        ),
+                  child: Row(children: [
+                    Text(
+                      time,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: isSender ? Colors.grey : Colors.white70,
                       ),
-                      SizedBox(width: 4),
-                      Image.asset(
-                        'images/double-check.png',
-                        width: 20,
-                      )
-                    ],
-                  ),
+                    ),
+                    SizedBox(width: 4),
+                    isSeen
+                        ? Image.asset(
+                            'images/double-check.png',
+                            width: 20,
+                          )
+                        : Image.asset(
+                            'images/mark (3).png',
+                            width: 21,
+                          ),
+                  ]),
                 ),
               ],
             ),

@@ -169,7 +169,8 @@ class _SignupState extends State<Signup> {
                           'Date de creation': DateTime.now(),
                           'id': FirebaseAuth.instance.currentUser?.uid,
                           'mot de passe ': mdp,
-                          'image url': url
+                          'image url': url,
+                          'etat': " activé"
                         });
 
                         // Set the display name for the user

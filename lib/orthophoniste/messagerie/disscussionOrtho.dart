@@ -28,7 +28,7 @@ class _DisscussionOrthoState extends State<DisscussionOrtho> {
         stream: FirebaseFirestore.instance
             .collection('message')
             .where('id conver ', isEqualTo: widget.id)
-            .orderBy('heure', descending: false)
+            .orderBy('Date', descending: false)
             .orderBy('__name__', descending: false)
             .snapshots(), // Corrected 'id conver' to 'id_conver'
 
@@ -66,10 +66,13 @@ class _DisscussionOrthoState extends State<DisscussionOrtho> {
                     final envoyeur = msgDocument.get('envoyeur');
                     final recepteur = msgDocument.get('recepteur');
                     final heure = msgDocument.get('heure');
+                    final status = msgDocument.get('statut');
                     final docid = msgDocument.id;
+                    print("++++++++++++++++++$index $status");
                     String heureMinute =
                         heure.split(':').sublist(0, 2).join(':');
                     bool isSender = isYouTheSender(envoyeur);
+
                     return Column(
                       children: [
                         CustomMessageBubble(
@@ -77,6 +80,7 @@ class _DisscussionOrthoState extends State<DisscussionOrtho> {
                           isSender: isSender,
                           time: heureMinute,
                           docid: docid,
+                          status: status,
                         ),
                         SizedBox(
                           height: 20,

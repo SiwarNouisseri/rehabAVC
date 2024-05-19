@@ -29,6 +29,26 @@ class _docMessState extends State<docMess> {
     }
   }
 
+  Future<void> updateMessages(String conversationId) async {
+    try {
+      var querySnapshot = await FirebaseFirestore.instance
+          .collection('message')
+          .where('id conver ', isEqualTo: conversationId)
+          .where("recepteur", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      for (var document in querySnapshot.docs) {
+        await document.reference.update({
+          'statut': 'vu',
+        });
+      }
+
+      print('Champs mis à jour avec succès.');
+    } catch (e) {
+      print('Erreur lors de la mise à jour des champs : $e');
+    }
+  }
+
   Future<String> addconverDetails(String idDoc) async {
     try {
       DateTime now = DateTime.now();
@@ -212,6 +232,7 @@ class _docMessState extends State<docMess> {
                                                 idPatient: idPat),
                                           ),
                                         );
+                                        updateMessages(idConver);
                                       },
                                       child: Column(
                                         children: [

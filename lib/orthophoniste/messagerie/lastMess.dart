@@ -1,7 +1,37 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LastMessageWidget extends StatelessWidget {
+  bool isYouTheSender(String senderId) {
+    String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
+    return currentUserId != null && currentUserId == senderId;
+  }
+
+  bool getStatusBool(String status) {
+    if (status == 'vu') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Widget buildMessageText(String status, bool isSender, String textContent) {
+    if (isSender) {
+      return Text(
+        "Vous : $textContent",
+        style: TextStyle(fontWeight: FontWeight.w300),
+      );
+    } else {
+      return Text(
+        textContent,
+        style: status == "vu"
+            ? TextStyle(fontWeight: FontWeight.w300)
+            : TextStyle(fontWeight: FontWeight.bold),
+      );
+    }
+  }
+
   final String conversation;
 
   const LastMessageWidget({Key? key, required this.conversation})
@@ -29,24 +59,18 @@ class LastMessageWidget extends StatelessWidget {
           return Text('Aucun message trouvé.');
         }
 
-        // Récupérer le dernier message
         var lastMessage = snapshot.data?.docs.first;
-        String messageText = lastMessage?[
-            'contenu']; // Supposons que 'message' est le champ contenant le texte du message.
-
+        String messageText = lastMessage?['contenu'];
+        String status = lastMessage?['statut'];
         String heure = lastMessage?['heure'];
+        String envoyeur = lastMessage?['envoyeur'];
         String heureMinute = heure.split(':').sublist(0, 2).join(':');
+        bool isSender = isYouTheSender(envoyeur);
+        bool isSeen = getStatusBool(status);
         return Container(
           width: 300,
           child: Row(children: [
-            Text(
-              messageText,
-              style: TextStyle(
-                fontWeight: FontWeight.w300,
-                color: Colors.black,
-                fontSize: 15,
-              ),
-            ),
+            buildMessageText(status, isSender, messageText),
             Spacer(),
             Text(
               heureMinute,

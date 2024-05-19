@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,20 @@ class PatientWidget extends StatefulWidget {
 }
 
 class _PatientWidgetState extends State<PatientWidget> {
+  void updateDocumentField(String docId) {
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection('users').doc(docId);
+
+    // Update the specific field using the update method
+    documentReference.update({
+      'etat': 'désactivé',
+    }).then((value) {
+      print('updated document successd');
+    }).catchError((error) {
+      print('Failed to update document field: $error');
+    });
+  }
+
   TextEditingController searchController = TextEditingController();
 
   @override
@@ -52,7 +67,8 @@ class _PatientWidgetState extends State<PatientWidget> {
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('users')
-              .orderBy('nom') // Tri par nom
+              .orderBy('nom')
+              .where('etat', isEqualTo: 'activé') // Tri par nom
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
@@ -84,6 +100,7 @@ class _PatientWidgetState extends State<PatientWidget> {
                   var mail = document.get('email');
                   var temps = document.get('Date de creation');
                   var idDoc = document.get('id');
+                  var doc = document.id;
                   var mdp = document.get('mot de passe ');
                   var role = document.get('role');
                   DateTime date = temps.toDate();
@@ -154,14 +171,6 @@ class _PatientWidgetState extends State<PatientWidget> {
                                               fontSize: 12,
                                             ),
                                           ),
-                                          Text(
-                                            "Mot de passe :" + " " + mdp,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.blueGrey[700],
-                                              fontSize: 12,
-                                            ),
-                                          ),
                                         ],
                                       ),
                                     ),
@@ -175,7 +184,20 @@ class _PatientWidgetState extends State<PatientWidget> {
                                             height: 40,
                                           ),
                                           GestureDetector(
-                                            //   onTap: () => deleteUserData(idDoc),
+                                            onTap: () {
+                                              AwesomeDialog(
+                                                context: context,
+                                                dialogType: DialogType.error,
+                                                animType: AnimType.rightSlide,
+                                                title: 'Suppression',
+                                                btnCancelOnPress: () {},
+                                                btnOkOnPress: () {
+                                                  updateDocumentField(doc);
+                                                },
+                                                desc:
+                                                    'Êtes-vous sûr de vouloir supprimer ce compte ?',
+                                              ).show();
+                                            },
                                             child: Column(
                                               children: [
                                                 Container(

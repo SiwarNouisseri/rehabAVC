@@ -15,6 +15,8 @@ import 'package:first/homepage.dart';
 import 'package:first/orthophoniste/homertho.dart';
 import 'package:first/orthophoniste/signupOrth.dart';
 import 'package:first/patient/docteurSophie.dart';
+import 'package:first/splashLogin.dart';
+import 'package:first/splashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -54,8 +56,8 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: (FirebaseAuth.instance.currentUser != null &&
               FirebaseAuth.instance.currentUser!.emailVerified)
-          ? RoleChecker()
-          : Login(),
+          ? Splash()
+          : SplashLogin(),
       routes: {
         "signup": (contexte) => Signup(),
         "login": (contexte) => Login(),

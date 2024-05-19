@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first/components/AddNote.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -207,213 +208,16 @@ class _envoiMesPatientState extends State<envoiMesPatient> {
                                     Spacer(),
                                     MaterialButton(
                                       onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: Text(
-                                                'ajouter une note ',
-                                                style: TextStyle(
-                                                  color: Colors
-                                                      .blue, // Couleur du texte du titre
-                                                  fontWeight: FontWeight
-                                                      .bold, // Gras pour le titre
-                                                ),
-                                              ),
-                                              content: Form(
-                                                key: formState,
-                                                child: SizedBox(
-                                                  width: 100,
-                                                  height: 300,
-                                                  // Étendre le contenu sur toute la largeur
-                                                  child: ListView(
-                                                    children: [
-                                                      SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                      TextField(
-                                                          controller:
-                                                              _textFieldController,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            hintText:
-                                                                'Entrez votre texte ici',
-                                                            hintStyle:
-                                                                TextStyle(
-                                                              color: Colors
-                                                                  .grey, // Couleur du texte de l'input
-                                                            ),
-                                                          )),
-                                                      SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                      Text(
-                                                        'Date limite',
-                                                        style: TextStyle(
-                                                          color: Colors
-                                                              .indigo, // Couleur du texte du titre
-                                                          fontWeight: FontWeight
-                                                              .bold, // Gras pour le titre
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                      Container(
-                                                        width: 240,
-                                                        child: Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    left: 30,
-                                                                    right: 10),
-                                                            child:
-                                                                TextFormField(
-                                                              controller:
-                                                                  _dateController,
-                                                              decoration:
-                                                                  InputDecoration(
-                                                                hintText:
-                                                                    'DATE',
-                                                                filled: true,
-                                                                fillColor:
-                                                                    Colors.teal[
-                                                                        50],
-                                                                prefixIcon:
-                                                                    Icon(Icons
-                                                                        .calendar_today),
-                                                                enabledBorder:
-                                                                    OutlineInputBorder(
-                                                                  borderSide:
-                                                                      BorderSide
-                                                                          .none,
-                                                                ),
-                                                                focusedBorder:
-                                                                    OutlineInputBorder(
-                                                                  borderSide:
-                                                                      BorderSide(
-                                                                          color:
-                                                                              Colors.blue),
-                                                                ),
-                                                              ),
-                                                              readOnly: true,
-                                                              validator: (val) {
-                                                                if (val!
-                                                                    .isEmpty) {
-                                                                  return "Please select a date";
-                                                                }
-                                                              },
-                                                              onTap: () {
-                                                                selectDate();
-                                                              },
-                                                            )),
-                                                      ),
-                                                      SizedBox(
-                                                          height:
-                                                              20), // Espacement entre le DateRangePicker et les actions
-                                                      Center(
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            TextButton(
-                                                              onPressed: () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                              child: Text(
-                                                                'Annuler',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .red),
-                                                              ),
-                                                            ),
-                                                            TextButton(
-                                                              onPressed: () {
-                                                                Future
-                                                                    addprogressionDetails(
-                                                                  String id,
-                                                                ) async {
-                                                                  DateTime
-                                                                      date =
-                                                                      DateTime.parse(
-                                                                          _dateController
-                                                                              .text);
-                                                                  for (String idExercice
-                                                                      in widget
-                                                                          .selectedExercise) {
-                                                                    await FirebaseFirestore
-                                                                        .instance
-                                                                        .collection(
-                                                                            'progression')
-                                                                        .add({
-                                                                      'id de patient':
-                                                                          id,
-                                                                      'id de docteur': FirebaseAuth
-                                                                          .instance
-                                                                          .currentUser!
-                                                                          .uid,
-                                                                      'id exercice':
-                                                                          idExercice,
-                                                                      "date d'envoi":
-                                                                          DateTime
-                                                                              .now(),
-                                                                      'date limite':
-                                                                          date,
-                                                                      'note': _textFieldController
-                                                                          .text,
-                                                                      'status':
-                                                                          "pas encore",
-                                                                      'problème':
-                                                                          'Pas de problème',
-                                                                      'etat':
-                                                                          "non vu"
-                                                                    });
-                                                                  }
-                                                                }
-
-                                                                addprogressionDetails(
-                                                                    idPat);
-                                                                _textFieldController
-                                                                    .clear();
-                                                                _dateController
-                                                                    .clear();
-
-                                                                AwesomeDialog(
-                                                                  context:
-                                                                      context,
-                                                                  dialogType:
-                                                                      DialogType
-                                                                          .success,
-                                                                  animType: AnimType
-                                                                      .rightSlide,
-                                                                  title:
-                                                                      'Exercices envoyés avec succès à $nom',
-                                                                ).show();
-                                                              },
-                                                              child: Text(
-                                                                'Valider',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .green),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              backgroundColor: Colors
-                                                  .white, // Couleur de fond de l'AlertDialog
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        15.0), // Bord arrondi
-                                              ),
-                                            );
-                                          },
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => AddNote(
+                                              selectedExercise:
+                                                  widget.selectedExercise,
+                                              idPat: idPat,
+                                              nom: nom,
+                                            ),
+                                          ),
                                         );
                                       },
                                       shape: RoundedRectangleBorder(

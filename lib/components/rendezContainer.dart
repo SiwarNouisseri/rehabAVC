@@ -13,44 +13,30 @@ class RendezContainer extends StatefulWidget {
 class _RendezContainerState extends State<RendezContainer> {
   bool dateNow = false;
   @override
-  Future<void> removeFollowUpRequest(String idDooc) async {
-    try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('suivi')
-          .where('id de patient',
-              isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-          .where('id de docteur', isEqualTo: idDooc)
-          .get();
+  void updateDocumentField(String docId) {
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection('rendez-vous').doc(docId);
 
-      if (querySnapshot.docs.isNotEmpty) {
-        // Assuming there's only one matching document, get its reference and delete it
-        DocumentSnapshot docSnapshot = querySnapshot.docs.first;
-        await docSnapshot.reference.delete();
-        AwesomeDialog(
-          context: context,
-          dialogType: DialogType.success,
-          animType: AnimType.bottomSlide,
-          title: 'Succès',
-          desc: 'Demande de suivi supprimée avec succès',
-        ).show();
-        print('Demande de suivi supprimée avec succès');
-      } else {
-        print('Aucune demande de suivi trouvée pour ce patient');
-      }
-    } catch (e) {
-      print('Erreur lors de la suppression de la demande de suivi: $e');
-    }
+    // Update the specific field using the update method
+    documentReference.update({
+      'status': 'annulé',
+      'id patient': FirebaseAuth.instance.currentUser!.uid
+    }).then((value) {
+      print('updated document successd');
+    }).catchError((error) {
+      print('Failed to update document field: $error');
+    });
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('rendez-vous')
-          .where('id de patient',
+          .where('id patient',
               isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-          .where('status', isEqualTo: "en cours de traitement")
+          .where('status', isEqualTo: "reservé")
+          .orderBy('date', descending: false)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -91,6 +77,7 @@ class _RendezContainerState extends State<RendezContainer> {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (BuildContext context, int index) {
                       var document = snapshot.data!.docs[index];
+                      var idDocment = snapshot.data!.docs.first.id;
                       var idDoc = document.get('id de docteur');
 
                       var horraire = document.get('date');
@@ -177,7 +164,7 @@ class _RendezContainerState extends State<RendezContainer> {
                                                             fontWeight:
                                                                 FontWeight.w600,
                                                             color: Colors
-                                                                .blueGrey[700],
+                                                                .blue[700],
                                                             fontSize: 15,
                                                           ),
                                                         ),
@@ -190,17 +177,17 @@ class _RendezContainerState extends State<RendezContainer> {
                                                               "$annee",
                                                           style: TextStyle(
                                                             fontWeight:
-                                                                FontWeight.w400,
+                                                                FontWeight.w500,
                                                             color: Colors
                                                                 .blueGrey[700],
                                                             fontSize: 13,
                                                           ),
                                                         ),
                                                         Text(
-                                                          "à :" + " " + heure,
+                                                          heure,
                                                           style: TextStyle(
                                                             fontWeight:
-                                                                FontWeight.w400,
+                                                                FontWeight.w500,
                                                             color: Colors
                                                                 .blueGrey[700],
                                                             fontSize: 13,
@@ -221,7 +208,8 @@ class _RendezContainerState extends State<RendezContainer> {
                                                         width: 100,
                                                         decoration:
                                                             const BoxDecoration(
-                                                          color: Colors.green,
+                                                          color: Color.fromARGB(
+                                                              255, 40, 189, 45),
                                                           borderRadius:
                                                               BorderRadius.all(
                                                                   Radius
@@ -237,7 +225,7 @@ class _RendezContainerState extends State<RendezContainer> {
                                                             style: TextStyle(
                                                               fontWeight:
                                                                   FontWeight
-                                                                      .w600,
+                                                                      .w400,
                                                               color:
                                                                   Colors.white,
                                                               fontSize: 14,
@@ -257,9 +245,23 @@ class _RendezContainerState extends State<RendezContainer> {
                                               padding: const EdgeInsets.only(
                                                   left: 320),
                                               child: GestureDetector(
-                                                onTap: () =>
-                                                    removeFollowUpRequest(
-                                                        idDoc),
+                                                onTap: () {
+                                                  AwesomeDialog(
+                                                    context: context,
+                                                    dialogType:
+                                                        DialogType.error,
+                                                    animType:
+                                                        AnimType.rightSlide,
+                                                    title: 'Annulation',
+                                                    desc:
+                                                        "Vous êtes sûr d'annuler ce rendez-vous ?",
+                                                    btnCancelOnPress: () {},
+                                                    btnOkOnPress: () {
+                                                      updateDocumentField(
+                                                          idDocment);
+                                                    },
+                                                  ).show();
+                                                },
                                                 child: Image.asset(
                                                   "images/bin.png",
                                                   width: 25,

@@ -124,11 +124,12 @@ class _DoctorScrollState extends State<DoctorScroll> {
                 var role = document.get('role');
                 var image = document.get('image url');
                 var prenom = document.get('prenom');
-                var temps = document.get('temps');
+
                 var years = document.get('exp');
                 var bio = document.get('bio');
                 var id = document.get('id');
                 var url = document.get('image url');
+                var addresse = document.get('addresse');
 
                 return GestureDetector(
                   onTap: () {
@@ -142,7 +143,6 @@ class _DoctorScrollState extends State<DoctorScroll> {
                             prenom: prenom,
                             role: role,
                             image: image,
-                            temps: "ok",
                             years: years,
                             onPressed: () async {
                               Future addsuivieDetails() async {
@@ -239,6 +239,8 @@ class _DoctorScrollState extends State<DoctorScroll> {
                                     });
                               }
                             },
+                            addresse: addresse,
+                            idDoc: id,
                           ),
                         ));
                   },
@@ -248,6 +250,7 @@ class _DoctorScrollState extends State<DoctorScroll> {
                       specialiste: role,
                       image: image,
                       onPressed: null,
+                      idDoc: id,
                     ),
                     SizedBox(width: 10),
                   ]),

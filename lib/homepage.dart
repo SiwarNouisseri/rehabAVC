@@ -34,7 +34,7 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: SizedBox(
-          height: 70,
+          height: 50,
           width: 200,
           child: CurvedNavigationBar(
             height: 50,
@@ -62,11 +62,9 @@ class _HomepageState extends State<Homepage> {
                 Icons.search_sharp,
                 color: Colors.white,
               ),
-              Badge(
-                child: Icon(
-                  Icons.notifications,
-                  color: Colors.white,
-                ),
+              Icon(
+                Icons.notifications,
+                color: Colors.white,
               ),
               Icon(
                 Icons.date_range_outlined,

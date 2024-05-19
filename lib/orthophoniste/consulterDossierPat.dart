@@ -43,7 +43,7 @@ class _ConsulterdossierPatientState extends State<ConsulterdossierPatient> {
                 var document = snapshot.data!.docs.first;
                 var documentid = document.id;
                 var reduction =
-                    snapshot.data!.docs.first.get('reduction_online');
+                    snapshot.data!.docs.first.get('rééduction enligne');
                 var age = snapshot.data!.docs.first.get('age');
                 var datee = snapshot.data!.docs.first.get('date Avc');
                 var type = snapshot.data!.docs.first.get('type Avc');

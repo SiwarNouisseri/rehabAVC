@@ -1,304 +1,404 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first/components/displayVideoDoc.dart';
-import 'package:first/orthophoniste/modifierex.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-class ChecklistItem {
-  String name;
-
-  bool isChecked;
-
-  ChecklistItem({required this.name, this.isChecked = false});
-}
+import 'package:iconsax/iconsax.dart';
+import 'package:time_range_picker/time_range_picker.dart';
+import 'package:flutter/cupertino.dart';
 
 class CalendrierOrtho extends StatefulWidget {
+  const CalendrierOrtho({
+    super.key,
+  });
+
   @override
-  _CalendrierOrthoState createState() => _CalendrierOrthoState();
+  State<CalendrierOrtho> createState() => _CalendrierOrthoState();
 }
 
 class _CalendrierOrthoState extends State<CalendrierOrtho> {
-  late CollectionReference<Map<String, dynamic>> exerciceref;
-  final TextEditingController searchController = TextEditingController();
-
   @override
-  void initState() {
-    super.initState();
+  TextEditingController _dateController = TextEditingController();
+  TextEditingController _heureController = TextEditingController();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  Future<void> selectDate() async {
+    DateTime? _picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2024),
+      lastDate: DateTime(2100),
+    );
 
-    exerciceref = FirebaseFirestore.instance.collection("exercices");
+    if (_picked != null) {
+      setState(() {
+        _dateController.text = _picked.toString().split(" ")[0];
+      });
+    }
   }
 
-  void dispose() {
-    searchController.dispose();
-    super.dispose();
+  TimeOfDay _timeOfDay = TimeOfDay.now();
+
+  Future<void> _selectTime() async {
+    TimeRange? _picked = await showTimeRangePicker(
+      context: context,
+      start: const TimeOfDay(hour: 9, minute: 0),
+      end: const TimeOfDay(hour: 12, minute: 0),
+      disabledTime: TimeRange(
+        startTime: const TimeOfDay(hour: 22, minute: 0),
+        endTime: const TimeOfDay(hour: 5, minute: 0),
+      ),
+      disabledColor: Colors.red.withOpacity(0.5),
+      strokeWidth: 4,
+      ticks: 24,
+      ticksOffset: -7,
+      ticksLength: 15,
+      ticksColor: Colors.grey,
+      labels: [
+        "12 am",
+        "3 am",
+        "6 am",
+        "9 am",
+        "12 pm",
+        "3 pm",
+        "6 pm",
+        "9 pm",
+      ].asMap().entries.map((e) {
+        return ClockLabel.fromIndex(
+          idx: e.key,
+          length: 8,
+          text: e.value,
+        );
+      }).toList(),
+      labelOffset: 35,
+      rotateLabels: false,
+      padding: 60,
+    );
+
+    if (_picked != null) {
+      setState(() {
+        _timeOfDay = _picked
+            .startTime; // Utilisez _picked.start ou _picked.end selon votre besoin
+
+        _heureController.text =
+            'Début: ${_timeOfDay.hour}:${_timeOfDay.minute} - Fin: ${_picked.endTime.hour}:${_picked.endTime.minute}';
+      });
+    }
   }
 
-  final List<ChecklistItem> checklist = [
-    ChecklistItem(name: 'Item 3'),
-  ];
+  Future addUserDetails(String id) async {
+    DateTime date = DateTime.parse(_dateController.text);
+
+    await FirebaseFirestore.instance.collection('rendez-vous').add({
+      'id de docteur': FirebaseAuth.instance.currentUser!.uid,
+      'id patient': '',
+      'date': date,
+      'heure': _heureController.text.trim(),
+      'status': "Non pris",
+    });
+  }
+
+  Future<bool> checkExistingRequest(String idDoctor) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('rendez-vous')
+        .where('id de docteur', isEqualTo: idDoctor)
+        .where('id de patient',
+            isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get();
+
+    return querySnapshot.docs.isNotEmpty;
+  }
+
+  Future<bool> checkStatueRequest() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('rendez-vous')
+        .where('status', isEqualTo: "en cours de traitement")
+        .get();
+
+    return querySnapshot.docs.isNotEmpty;
+  }
+
+  Future<void> removeFollowUpRequest(String idPatient, String idDoctor) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('rendez-vous')
+          .where('id de patient', isEqualTo: idPatient)
+          .where('id de docteur', isEqualTo: idDoctor)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // Assuming there's only one matching document, get its reference and delete it
+        DocumentSnapshot docSnapshot = querySnapshot.docs.first;
+        await docSnapshot.reference.delete();
+        print('Demande de suivi supprimée avec succès');
+      } else {
+        print('Aucune demande de suivi trouvée pour ce patient');
+      }
+    } catch (e) {
+      print('Erreur lors de la suppression de la demande de suivi: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: SizedBox(
-          height: 40,
-          child: TextFormField(
-            controller: searchController,
-            onChanged: (value) {
-              setState(() {});
-            },
-            decoration: InputDecoration(
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(40),
-                borderSide: BorderSide(color: Colors.blue[300] ?? Colors.blue),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(40),
-                borderSide: BorderSide(color: Colors.blue[200] ?? Colors.blue),
-              ),
-              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-              filled: true,
-              fillColor: Colors.grey[50] ?? Colors.grey,
-              hintText: 'Rechercher',
-              hintStyle: TextStyle(color: Colors.grey),
-              prefixIcon: Icon(
-                Icons.search,
-                color: Colors.grey,
-              ),
+      body: Form(
+        key: formKey,
+        child: ListView(
+          children: [
+            Container(
+                height: 120,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.blue[400] ?? Colors.blue,
+                      Colors.blue[200] ?? Colors.blue,
+                    ], // Couleurs du dégradé
+                    begin: Alignment.topLeft, // Position de départ du dégradé
+                    end: Alignment.bottomLeft, // Position d'arrêt du dégradé
+                  ),
+                  color: Colors.blue[300],
+                  borderRadius: const BorderRadius.only(
+                    bottomRight: Radius.circular(30),
+                    bottomLeft: Radius.circular(30),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.blue.withOpacity(0.3), // Couleur de l'ombre
+                      spreadRadius: 20, // Rayon de diffusion de l'ombre
+                      blurRadius: 100, // Rayon de flou de l'ombre
+                      offset: Offset(0, 3), // Décalage de l'ombre
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 80, top: 30),
+                  child: Text(
+                    "Fixer un rendez-vous",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                        fontSize: 25),
+                  ),
+                )),
+            SizedBox(
+              height: 40,
             ),
-          ),
-        ),
-      ),
-      body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          future: exerciceref
-              .where('id de docteur',
-                  isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-              .get(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-              return Center(child: Text('No data available'));
-            } else {
-              List<DocumentSnapshot> doctors = snapshot.data!.docs;
-              List<DocumentSnapshot> filteredDoctors = doctors.where((doc) {
-                var nom = doc.get('nom');
+            /* Center(
+              child: Text("Fixer un Rendez-vous",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.indigo,
+                      fontSize: 23)),
+            ),*/
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              height: 100,
+              width: 100,
+              child: Image.asset("images/appointment (2).png"),
+            ),
+            /* Column(
+              children: [
+                Container(
+                  width: 150,
+                  child: CircleAvatar(
+                      radius: 65.0, backgroundImage: NetworkImage(widget.image)),
+                ),
+              ],
+            ),*/
+            /*Center(
+              child: Text("Dr. Oumaima Karray",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      color: Colors.blue,
+                      fontSize: 23)),
+            ),*/
+            SizedBox(
+              height: 30,
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Column(children: [
+              Text("Date :",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.blueGrey,
+                      fontSize: 23)),
+              Column(
+                children: [
+                  Container(
+                    width: 280,
+                    child: Padding(
+                        padding: EdgeInsets.only(left: 2, right: 2),
+                        child: TextFormField(
+                          validator: (val) {
+                            if (val!.isEmpty) {
+                              return "Champs vide";
+                            }
+                          },
+                          controller: _dateController,
+                          decoration: InputDecoration(
+                            hintText: 'DATE',
+                            filled: true,
+                            fillColor: Colors.blue[50],
+                            prefixIcon: Icon(Icons.calendar_today),
+                            enabledBorder:
+                                OutlineInputBorder(borderSide: BorderSide.none),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                          readOnly: true,
+                          onTap: () {
+                            selectDate();
+                          },
+                        )),
+                  ),
+                ],
+              ),
+            ]),
+            SizedBox(
+              height: 50,
+            ),
+            Column(children: [
+              Text("Heure :",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.blueGrey,
+                      fontSize: 23)),
+              Column(
+                children: [
+                  Container(
+                    width: 280,
+                    child: Padding(
+                        padding: EdgeInsets.only(left: 2, right: 2),
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Champs vide";
+                            }
+                          },
+                          controller: _heureController,
+                          decoration: InputDecoration(
+                            hintText: 'HEURE',
+                            filled: true,
+                            fillColor: Colors.blue[50],
+                            prefixIcon: Icon(Icons.timer),
+                            enabledBorder:
+                                OutlineInputBorder(borderSide: BorderSide.none),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                          readOnly: true,
+                          onTap: () {
+                            _selectTime();
+                          },
+                        )),
+                  ),
+                ],
+              ),
+            ]),
+            SizedBox(
+              height: 80,
+            ),
+            Center(
+              child: Column(children: [
+                Container(
+                  height: 40,
+                  width: 180,
+                  child: MaterialButton(
+                      minWidth: 20,
+                      color: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                          side: BorderSide(color: Colors.white, width: 2),
+                          borderRadius: BorderRadius.circular((90))),
+                      child: Text("Valider",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                              color: Colors.white)),
+                      onPressed: () async {
+                        if (formKey.currentState!.validate()) {
+                          bool statusRequest = await checkStatueRequest();
+                          DateTime parsedDate =
+                              DateTime.parse(_dateController.text);
 
-                var searchText = searchController.text.toLowerCase();
-                return nom.toLowerCase().contains(searchText);
-              }).toList();
-              return Container(
-                height: 400,
-                child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: filteredDoctors.length,
-                    itemBuilder: (context, index) {
-                      var document = filteredDoctors[index];
-                      final nom = document.get('nom');
-                      final url = document.get('urlvideo');
-                      final description = document.get('description');
-                      final id = document.id;
-
-                      return Column(
-                        children: [
-                          Container(
-                            width: 400,
-                            height: 200,
-                            child: ListView.builder(
-                              itemCount: checklist.length,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) {
-                                ChecklistItem item = checklist[index];
-                                return Card(
-                                  color: Colors.grey[50],
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "Exercice",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w800,
-                                                color: Colors.blueGrey,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                            Text(
-                                              " ${index + 1} : " + " ",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w800,
-                                                color: Colors.blueGrey,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                            Text(
-                                              nom,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w800,
-                                                color: Colors.blue,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                            Spacer(),
-                                            Row(
-                                              children: [
-                                                Checkbox(
-                                                  value: item.isChecked,
-                                                  onChanged: (value) {
-                                                    // Mettre à jour l'état de vérification de l'élément
-                                                    item.isChecked = value!;
-                                                    // Mettre à jour l'interface utilisateur lorsque l'état change
-                                                    setState(() {});
-                                                  },
-                                                ),
-                                                PopupMenuButton(
-                                                  itemBuilder: (context) => [
-                                                    PopupMenuItem(
-                                                      onTap: () {
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  EditEx(
-                                                                      url:
-                                                                          url)),
-                                                        );
-                                                      },
-                                                      child: Row(children: [
-                                                        Icon(
-                                                          Icons
-                                                              .remove_red_eye_outlined,
-                                                          color:
-                                                              Colors.blueGrey,
-                                                        ), // Icon
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 10.0),
-                                                          child:
-                                                              Text('Consulter'),
-                                                        ),
-                                                      ]),
-                                                    ),
-                                                    PopupMenuItem(
-                                                      child: Row(children: [
-                                                        Icon(
-                                                          Icons.share,
-                                                          color:
-                                                              Colors.blueGrey,
-                                                        ), // Icon
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 10.0),
-                                                          child:
-                                                              Text('Envoyer'),
-                                                        ),
-                                                      ]),
-                                                    ),
-                                                  ],
-                                                  child: Icon(
-                                                    Icons.more_vert,
-                                                    size: 28.0,
-                                                    color: Colors.blueGrey,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        Text(
-                                          description,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black,
-                                            fontSize: 13,
-                                          ),
-                                        ),
-                                        SizedBox(height: 20),
-                                        Row(
-                                          children: [
-                                            Spacer(),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ModifierExercice(
-                                                              id: id)),
-                                                );
-                                                // setState(() {});*/
-                                              },
-                                              child: Image.asset(
-                                                "images/edit.png",
-                                                width: 25,
-                                              ),
-                                            ),
-                                            SizedBox(width: 20),
-                                            GestureDetector(
-                                              onTap: () async {
-                                                AwesomeDialog(
-                                                  context: context,
-                                                  dialogType:
-                                                      DialogType.question,
-                                                  animType:
-                                                      AnimType.bottomSlide,
-                                                  title:
-                                                      'Vous êtes sûr de supprimer cet exercice ',
-                                                  btnOkOnPress: () async {
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection('exercices')
-                                                        .doc(document.id)
-                                                        .delete();
-                                                  },
-                                                ).show();
-                                              },
-                                              child: Image.asset(
-                                                "images/binbin.png",
-                                                width: 25,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                          if (parsedDate.isBefore(DateTime.now())) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                    'Rappel',
+                                    style: TextStyle(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  content: Text(
+                                    'Date déjà dépassé',
+                                    style: TextStyle(
+                                        color: Colors.blueGrey[700],
+                                        fontWeight: FontWeight.w700),
+                                    textAlign: TextAlign.center,
                                   ),
                                 );
                               },
-                            ),
-                          ),
-                        ],
-                      );
-                    }),
-              );
-            }
-          }),
-      floatingActionButton: _buildNavigationButton(),
-    );
-  }
+                            );
+                          } else {
+                            // Ajouter un nv RDV
 
-  Widget _buildNavigationButton() {
-    bool isAnyChecked = checklist.any((item) => item.isChecked);
-    if (isAnyChecked) {
-      return FloatingActionButton(
-        onPressed: () {
-          // Action à effectuer lors du clic sur le bouton de navigation
-          // Navigator.push(...);
-        },
-        child: Icon(Icons.navigate_next),
-      );
-    } else {
-      // Si aucun élément n'est coché, ne pas afficher de bouton
-      return Container();
-    }
+                            addUserDetails(
+                                FirebaseAuth.instance.currentUser!.uid);
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CalendrierOrtho()),
+                            );
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                    'Ajout',
+                                    style: TextStyle(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  content: Text(
+                                    'Rendez-vous ajouté avec succès',
+                                    style: TextStyle(
+                                        color: Colors.blueGrey[700],
+                                        fontWeight: FontWeight.w700),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                        } else {
+                          AwesomeDialog(
+                                  context: context,
+                                  animType: AnimType.bottomSlide,
+                                  desc: 'Champs invalides',
+                                  dialogType: DialogType.error,
+                                  title: 'Erreur')
+                              .show();
+                        }
+                      }),
+                )
+              ]),
+            ),
+            SizedBox(
+              width: 20,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

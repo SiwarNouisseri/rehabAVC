@@ -12,6 +12,26 @@ class PatientMess extends StatefulWidget {
 }
 
 class _PatientMessState extends State<PatientMess> {
+  Future<void> updateMessages(String conversationId) async {
+    try {
+      var querySnapshot = await FirebaseFirestore.instance
+          .collection('message')
+          .where('id conver ', isEqualTo: conversationId)
+          .where("recepteur", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      for (var document in querySnapshot.docs) {
+        await document.reference.update({
+          'statut': 'vu',
+        });
+      }
+
+      print('Champs mis à jour avec succès.');
+    } catch (e) {
+      print('Erreur lors de la mise à jour des champs : $e');
+    }
+  }
+
   Future<String?> checkExistingconversation(String idPatient) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('conversation')
@@ -105,10 +125,6 @@ class _PatientMessState extends State<PatientMess> {
               return Container(
                 width: 370,
                 height: 70,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  color: Colors.amber,
-                ),
                 child: Row(
                   children: [
                     Padding(
@@ -212,6 +228,7 @@ class _PatientMessState extends State<PatientMess> {
                                                 idPatient: idPat),
                                           ),
                                         );
+                                        updateMessages(idConver);
                                       },
                                       child: Column(
                                         children: [
